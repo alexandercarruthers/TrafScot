@@ -1,0 +1,26 @@
+<!--  MPD XML Starter code Semester B Session 2018 2019  -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <!--  MPD XML Starter code Semester B Session 2018 2019  -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnCurrentRoadworks"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="currentRoadworks" />
+
+        <TextView
+            android:id="@+id/salutation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!" />
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -27,21 +27,28 @@ public class EventDaoImpl  implements EventDao{
 
     private String currentIncidents = "https://trafficscotland.org/rss/feeds/currentincidents.aspx";
     private String currentRoadworksUrl = "https://trafficscotland.org/rss/feeds/roadworks.aspx";
-    private String futureRoadworks = "https://trafficscotland.org/rss/feeds/plannedroadworks.aspx";
+    private String futureRoadworksUrl = "https://trafficscotland.org/rss/feeds/plannedroadworks.aspx";
 
     @Override
     public List<Event> getAllCurrentIncidents() {
-        return null;
+        List<Event> events = getData(currentIncidents);
+        List<Event> currentIncidents = advanceParseCurrentIncidents(events);
+        return currentIncidents;
     }
 
     @Override
     public List<Event> getAllCurrentRoadworks() {
         List<Event> events = getData(currentRoadworksUrl);
-        //further parse
         List<Event> currentRoadworks = advanceParseCurrentRoadworks(events);
         return currentRoadworks;
     }
 
+    @Override
+    public List<Event> getAllFutureRoadworks() {
+        List<Event> events = getData(futureRoadworksUrl);
+        List<Event> futureRoadworks = advanceParseFutureRoadworks(events);
+        return futureRoadworks;
+    }
 
 
 
@@ -125,11 +132,85 @@ public class EventDaoImpl  implements EventDao{
         return events;
     }
 
-
-    @Override
-    public List<Event> getAllFutureRoadworks() {
-        return null;
+    private List<Event> advanceParseCurrentIncidents(List<Event> rawCurrentIncidents){
+        List<Event> currentIncidents = new ArrayList<>();
+        for (Event event : rawCurrentIncidents){
+            Event roadworkEvent = new EventBuilder()
+                    .setTitle(event.getTitle())
+                    .setDescription(event.getDescription())
+                    .setLink(event.getLink())
+                    .setPoint(event.getPoint())
+                    .setAuthor(event.getAuthor())
+                    .setComments(event.getComments())
+                    .setPubDate(event.getPubDate())
+                    .setTrunkRoad(event.getTrunkRoad())
+                    .setStartDate(new Date())
+                    .setEndDate(new Date())
+                    .setDelayInformation("")
+                    .setDirection("")
+                    .setDisruption("")
+                    .setLengthDisruptionDays(new Long(0))
+                    .createEvent();
+            currentIncidents.add(roadworkEvent);
+        }
+        return currentIncidents;
     }
+
+    private List<Event> advanceParseCurrentRoadworks(List<Event> rawRoadworks){
+        List<Event> currentRoadworks = new ArrayList<>();
+        for (Event event : rawRoadworks){
+            String title = event.getTitle();
+            String description = event.getDescription();
+            Date startDate = getRoadworksStartDate(description);
+            Date endDate = getRoadworksEndDate(description);
+            String delayInformation = getDelayInformation(description);
+            String direction = getDirection(title);
+            String disruption = getTypeOfDisruption(title);
+            Long lengthOfDisruptionDays = getDateDiff(startDate,endDate, TimeUnit.DAYS);
+            Event roadworkEvent = new EventBuilder()
+                    .setTitle(event.getTitle())
+                    .setDescription(event.getDescription())
+                    .setLink(event.getLink())
+                    .setPoint(event.getPoint())
+                    .setAuthor(event.getAuthor())
+                    .setComments(event.getComments())
+                    .setPubDate(event.getPubDate())
+                    .setTrunkRoad(event.getTrunkRoad())
+                    .setStartDate(startDate)
+                    .setEndDate(endDate)
+                    .setDelayInformation(delayInformation)
+                    .setDirection(direction)
+                    .setDisruption(disruption)
+                    .setLengthDisruptionDays(lengthOfDisruptionDays)
+                    .createEvent();
+            currentRoadworks.add(roadworkEvent);
+        }
+        return currentRoadworks;
+    }
+    private List<Event> advanceParseFutureRoadworks(List<Event> rawFutureRoadworks){
+        List<Event> futureRoadworks = new ArrayList<>();
+        for (Event event : rawFutureRoadworks){
+            Event roadworkEvent = new EventBuilder()
+                    .setTitle(event.getTitle())
+                    .setDescription(event.getDescription())
+                    .setLink(event.getLink())
+                    .setPoint(event.getPoint())
+                    .setAuthor(event.getAuthor())
+                    .setComments(event.getComments())
+                    .setPubDate(event.getPubDate())
+                    .setTrunkRoad(event.getTrunkRoad())
+                    .setStartDate(new Date())
+                    .setEndDate(new Date())
+                    .setDelayInformation("")
+                    .setDirection("")
+                    .setDisruption("")
+                    .setLengthDisruptionDays(new Long(0))
+                    .createEvent();
+            futureRoadworks.add(roadworkEvent);
+        }
+        return futureRoadworks;
+    }
+
 
     @Override
     public List<Event> getMotorwayEvents(String searchForMotorway, List<Event> events) {
@@ -148,13 +229,7 @@ public class EventDaoImpl  implements EventDao{
         return matchedEvents;
     }
 
-    private List<Event> advanceParseFutureRoadworks(List<Event> rawFutureRoadworks){
-        List<Event> futureRoadworks = new ArrayList<>();
-        for (Event event : futureRoadworks){
 
-        }
-        return futureRoadworks;
-    }
     private Date getRoadworksStartDate(String description){
         Date startDate = null;
         SimpleDateFormat formatter = new SimpleDateFormat(" E, d MMM y - H:m");
@@ -235,37 +310,6 @@ public class EventDaoImpl  implements EventDao{
         return disruption;
     }
 
-    private List<Event> advanceParseCurrentRoadworks(List<Event> rawRoadworks){
-        List<Event> currentRoadworks = new ArrayList<>();
-        for (Event event : rawRoadworks){
-            String title = event.getTitle();
-            String description = event.getDescription();
-            Date startDate = getRoadworksStartDate(description);
-            Date endDate = getRoadworksEndDate(description);
-            String delayInformation = getDelayInformation(description);
-            String direction = getDirection(title);
-            String disruption = getTypeOfDisruption(title);
-            Long lengthOfDisruptionDays = getDateDiff(startDate,endDate, TimeUnit.DAYS);
-            Event roadworkEvent = new EventBuilder()
-                    .setTitle(event.getTitle())
-                    .setDescription(event.getDescription())
-                    .setLink(event.getLink())
-                    .setPoint(event.getPoint())
-                    .setAuthor(event.getAuthor())
-                    .setComments(event.getComments())
-                    .setPubDate(event.getPubDate())
-                    .setTrunkRoad(event.getTrunkRoad())
-                    .setStartDate(startDate)
-                    .setEndDate(endDate)
-                    .setDelayInformation(delayInformation)
-                    .setDirection(direction)
-                    .setDisruption(disruption)
-                    .setLengthDisruptionDays(lengthOfDisruptionDays)
-                    .createEvent();
-            currentRoadworks.add(roadworkEvent);
-        }
-        return currentRoadworks;
-    }
 
     @Override
     public List<Event> getRoadworksOnDate(Date searchForDate, List<Event> roadworks) {

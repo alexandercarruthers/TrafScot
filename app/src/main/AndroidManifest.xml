@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.CurrentRoadworks"></activity>
+        <activity android:name=".UI.Test"></activity>
+        <activity android:name=".UI.RoadworksOnDate" />
+        <activity android:name=".UI.CurrentIncidents" />
+        <activity android:name=".UI.FutureRoadworks" />
+        <activity android:name=".UI.CurrentRoadworks" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

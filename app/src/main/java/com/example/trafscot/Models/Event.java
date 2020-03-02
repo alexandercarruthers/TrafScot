@@ -22,6 +22,11 @@ public  class Event implements Parcelable {
     private final String disruption; //Types:
     private final Long lengthDisruptionDays;
 
+    @Override
+    public String toString() {
+        return title ;
+    }
+
     public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override
         public Event createFromParcel(Parcel in) {

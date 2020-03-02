@@ -1,5 +1,7 @@
 package com.example.trafscot.Service;
 
+import android.graphics.Color;
+
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -21,15 +23,14 @@ public class Helpers {
      * @param days
      * @return
      */
-    public String getRoadworksImpact(int days){
-        String colour = "";
+    public int getRoadworksImpact(int days){
         if (days < 5){
-            colour = "green";
+            return Color.GREEN;
         } else if (days > 6 && days < 10 ){
-            colour = "yellow";
+            return Color.YELLOW;
         } else if (days > 11) {
-            colour = "red";
+            return Color.RED;
         }
-       return colour;
+        return 0;
     }
 }

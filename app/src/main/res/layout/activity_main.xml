@@ -9,10 +9,34 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btnCurrentIncidents"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Incidents" />
+
+        <Button
             android:id="@+id/btnCurrentRoadworks"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="currentRoadworks" />
+            android:text="Current Roadworks" />
+
+        <Button
+            android:id="@+id/btnFutureRoadworks"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Future Roadworks" />
+
+        <Button
+            android:id="@+id/btnRoadworksOnDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Roadworks on date" />
+
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Test" />
 
         <TextView
             android:id="@+id/salutation"

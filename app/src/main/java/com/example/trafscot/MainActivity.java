@@ -2,26 +2,38 @@ package com.example.trafscot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ExpandableListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.example.trafscot.Dao.EventDao;
 import com.example.trafscot.Dao.EventDaoImpl;
+import com.example.trafscot.Models.ChildItemsInfo;
 import com.example.trafscot.Models.Event;
-import com.example.trafscot.UI.CurrentIncidents;
-import com.example.trafscot.UI.CurrentRoadworks;
-import com.example.trafscot.UI.FutureRoadworks;
+import com.example.trafscot.Models.GroupItemsInfo;
+import com.example.trafscot.Service.MyExpandableListAdapter;
 import com.example.trafscot.UI.RoadworksOnDate;
-import com.example.trafscot.UI.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    //current selected
+    List<Event> currentlySelected = new ArrayList<>();
     //data
     List<Event> currentIncidents = new ArrayList<>();
     List<Event> currentRoadworks = new ArrayList<>();
@@ -30,14 +42,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnCurrentIncidents;
     private Button btnCurrentRoadworks;
     private Button btnFutureRoadworks;
-    private Button btnRoadworksOnDate;
-    private Button btnTest;
+    private Button btnClear;
+    private Button btnGetDate;
+
+
+
+    private LinkedHashMap<String, GroupItemsInfo> songsList = new LinkedHashMap<String, GroupItemsInfo>();
+    private ArrayList<GroupItemsInfo> deptList = new ArrayList<GroupItemsInfo>();
+
+    private MyExpandableListAdapter myExpandableListAdapter;
+    private ExpandableListView simpleExpandableListView;
+
+    private ArrayList<GroupItemsInfo> emptyTest = new ArrayList<GroupItemsInfo>();
+
+    DatePickerDialog datePickerDialog;
+    Date datePicked;
+
+    private TextView filterDate;
+    private TextView filterRoad;
+    private TextView records;
+
+    private Spinner trunkRoadSpinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); //prevent keyboard popping up
         btnCurrentIncidents = (Button) findViewById(R.id.btnCurrentIncidents);
         btnCurrentIncidents.setOnClickListener(this);
 
@@ -47,51 +79,230 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnFutureRoadworks = (Button) findViewById(R.id.btnFutureRoadworks);
         btnFutureRoadworks.setOnClickListener(this);
 
-        btnRoadworksOnDate = (Button) findViewById(R.id.btnRoadworksOnDate);
-        btnRoadworksOnDate.setOnClickListener(this);
+        btnClear = (Button) findViewById(R.id.btnClear);
+        btnClear.setOnClickListener(this);
 
-        btnTest = (Button) findViewById(R.id.btnTest);
-        btnTest.setOnClickListener(this);
+        btnGetDate = (Button) findViewById(R.id.btnGetDate);
+        btnGetDate.setOnClickListener(this);
 
+        filterDate = (TextView)findViewById(R.id.filterDate);
+        
+        records = (TextView)findViewById(R.id.records);
         AsyncTaskExample asyncTask = new AsyncTaskExample();
         asyncTask.execute();
     }
 
     public void onClick(View view) {
         if (view == btnCurrentIncidents) {
-            Intent intent = new Intent(this, CurrentIncidents.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("currentIncidents", (ArrayList<? extends Parcelable>) currentIncidents);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            currentlySelected.addAll(currentIncidents);
+            clearExpandingListView();
+            loadData(currentIncidents);
+            setDataExpandingListView();
+
         }
         if (view == btnCurrentRoadworks) {
-            Intent intent = new Intent(this, CurrentRoadworks.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("currentRoadworks", (ArrayList<? extends Parcelable>) currentRoadworks);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            getAllTrunkRoad(currentRoadworks);
+            clearExpandingListView();
+            currentlySelected.addAll(currentRoadworks);
+            loadData(currentRoadworks);
+            setDataExpandingListView();
         }
         if (view == btnFutureRoadworks){
-            Intent intent = new Intent(this, FutureRoadworks.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("futureRoadworks", (ArrayList<? extends Parcelable>) futureRoadworks);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            clearExpandingListView();
+            currentlySelected.addAll(futureRoadworks);
+            loadData(futureRoadworks);
+            setDataExpandingListView();
         }
-        if (view == btnRoadworksOnDate){
-            Intent intent = new Intent(this, RoadworksOnDate.class);
-            startActivity(intent);
+        if (view == btnClear){
+            clearExpandingListView();
         }
-        if (view == btnTest){
-            Intent intent = new Intent(this, Test.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("currentRoadworks", (ArrayList<? extends Parcelable>) currentRoadworks);
-            intent.putExtras(bundle);
-            startActivity(intent);
+        if (view == btnGetDate){
+            final Calendar c = Calendar.getInstance();
+            int mYear = c.get(Calendar.YEAR); // current year
+            int mMonth = c.get(Calendar.MONTH); // current month
+            int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+            // date picker dialog
+            datePickerDialog = new DatePickerDialog(MainActivity.this,
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set(year, monthOfYear, dayOfMonth);
+                            datePicked = calendar.getTime();
+                            DateFormat dateFormat = new SimpleDateFormat("d-M-y");
+                            String strDate = dateFormat.format(datePicked);
+                            List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
+                            filterDate.setText("Date: " + strDate);
+                            deptList.clear();
+                            songsList.clear();
+                            clearOnlyListView();
+                            loadData(filteredRoadworks);
+                            setDataExpandingListView();
+
+                        }
+                    }, mYear, mMonth, mDay);
+            datePickerDialog.show();
+
         }
     }
 
+    // Function to remove duplicates from an ArrayList
+    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
+    {
+        // Create a new ArrayList
+        ArrayList<T> newList = new ArrayList<T>();
+
+        // Traverse through the first list
+        for (T element : list) {
+
+            // If this element is not present in newList
+            // then add it
+            if (!newList.contains(element)) {
+
+                newList.add(element);
+            }
+        }
+
+        // return the new list
+        return newList;
+    }
+
+
+    private void getAllTrunkRoad(List<Event> events){
+        ArrayList<String> trunkRoads = new ArrayList<>();
+        for(Event event : events){
+            trunkRoads.add(event.getTrunkRoad());
+        }
+        List<String> setOfTrunkRoads = removeDuplicates(trunkRoads);
+
+        trunkRoadSpinner = (Spinner) findViewById(R.id.trunkRoadSpinner);
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, setOfTrunkRoads);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        trunkRoadSpinner.setAdapter(dataAdapter);
+        //filterRoad.setText(String.valueOf(trunkRoadSpinner.getSelectedItem()));
+    }
+
+
+
+
+    private void resetFilters(){filterDate.setText(""); }
+    private List<Event> getFilteredEventList(Date date, List<Event> eventToFilter){
+        EventDao eventDao = new EventDaoImpl();
+        List<Event> filteredEvents = eventDao.getRoadworksOnDate(date,eventToFilter);
+        return filteredEvents;
+    }
+
+    private void setDataExpandingListView(){
+        // create the adapter by passing your ArrayList data
+        myExpandableListAdapter = new MyExpandableListAdapter(this, emptyTest);
+        simpleExpandableListView.setAdapter(myExpandableListAdapter);
+        myExpandableListAdapter = new MyExpandableListAdapter(this, deptList);
+        // attach the adapter to the expandable list view
+        simpleExpandableListView.setAdapter(myExpandableListAdapter);
+        // setOnChildClickListener listener for child row click or song name click
+        //use this to add event handling for clickig on start date, end date etc
+        simpleExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                GroupItemsInfo headerInfo = deptList.get(groupPosition);
+                ChildItemsInfo detailInfo = headerInfo.getSongName().get(childPosition);
+                return false;
+            }
+        });
+        simpleExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                GroupItemsInfo headerInfo = deptList.get(groupPosition);
+                return false;
+            }
+        });
+    }
+
+    private void clearOnlyListView(){
+        simpleExpandableListView = (ExpandableListView) findViewById(R.id.simpleExpandableListView);
+        myExpandableListAdapter = new MyExpandableListAdapter(this, emptyTest);
+        simpleExpandableListView.setAdapter(myExpandableListAdapter);
+    }
+    private void clearExpandingListView(){
+        currentlySelected.clear();
+        records.setText("Records: ");
+        filterDate.setText("");
+        deptList.clear();
+        songsList.clear();
+        simpleExpandableListView = (ExpandableListView) findViewById(R.id.simpleExpandableListView);
+        myExpandableListAdapter = new MyExpandableListAdapter(this, emptyTest);
+        simpleExpandableListView.setAdapter(myExpandableListAdapter);
+    }
+    private void loadData(List<Event> data) {
+        records.setText("Records: " +  data.size());
+        if(data.size() > 0){
+            for(Event event : data){
+                addProduct(event.getTitle(), "Trunk Road: " + event.getTrunkRoad());
+                if(!event.getDirection().equals("")){
+                    addProduct(event.getTitle(), "Direction: " + event.getDirection());
+                }
+                //if published date and start date
+                //if 0 dates are the same display only one
+                if(0 == event.getPubDate().compareTo(event.getStartDate())){
+                    addProduct(event.getTitle(), "Start date: " + event.getStartDate().toString());
+                }
+                else{ //display both dates as they are different
+                    addProduct(event.getTitle(), "Published: " + event.getPubDate().toString());
+                    addProduct(event.getTitle(), "Start date: " + event.getStartDate().toString());
+                }
+
+                addProduct(event.getTitle(), "End date: " + event.getEndDate().toString());
+                addProduct(event.getTitle(), "Days of works: " + event.getLengthDisruptionDays().toString());
+                addProduct(event.getTitle(), event.getDescription());
+                //addProduct(event.getTitle(), event.getLink());
+                addProduct(event.getTitle(), event.getPoint().toString());
+                if(!event.getAuthor().equals("")){
+                    addProduct(event.getTitle(), event.getAuthor());
+                }
+                if(!event.getComments().equals("")){
+                    addProduct(event.getTitle(), event.getComments());
+                }
+                if(!event.getDelayInformation().equals("")){
+                    addProduct(event.getTitle(), event.getDelayInformation());
+                }
+                if(!event.getDisruption().equals("")){
+                    addProduct(event.getTitle(), event.getDisruption());
+                }
+            }
+        }else
+        {
+            addProduct("no data", "nothing");
+        }
+    }
+    // here we maintain songsList and songs names
+    private int addProduct(String songsListName, String songName) {
+        int groupPosition = 0;
+        //check the hashmap if the group already exists
+        GroupItemsInfo headerInfo = songsList.get(songsListName);
+        //add the group if doesn't exists
+        if (headerInfo == null) {
+            headerInfo = new GroupItemsInfo();
+            headerInfo.setName(songsListName);
+            songsList.put(songsListName, headerInfo);
+            deptList.add(headerInfo);
+        }
+        // get the children for the group
+        ArrayList<ChildItemsInfo> productList = headerInfo.getSongName();
+        // size of the children list
+        int listSize = productList.size();
+        // add to the counter
+        listSize++;
+        // create a new child and add that to the group
+        ChildItemsInfo detailInfo = new ChildItemsInfo();
+        detailInfo.setName(songName);
+        productList.add(detailInfo);
+        headerInfo.setPlayerName(productList);
+        // find the group position inside the list
+        groupPosition = deptList.indexOf(headerInfo);
+        return groupPosition;
+    }
 
     private class AsyncTaskExample extends AsyncTask<Void, Void, Void> {
         @Override
@@ -102,15 +313,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             futureRoadworks = eventDao.getAllFutureRoadworks();
             return null;
         }
-
         @Override
         protected void onPostExecute(Void v) {
-            TextView breakingNews = (TextView) findViewById(R.id.salutation);
-            breakingNews.setText("");
-            for (Event event : currentRoadworks) {
-                //breakingNews.append(event.toString());
-                //breakingNews.append("\n");
-            }
         }
 
     }

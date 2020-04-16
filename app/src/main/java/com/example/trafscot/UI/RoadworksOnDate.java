@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -44,6 +45,7 @@ public class RoadworksOnDate extends AppCompatActivity {
 
         AsyncTaskExample asyncTask = new AsyncTaskExample();
         asyncTask.execute();
+
 
 
         picker=(DatePicker)findViewById(R.id.datePicker1);

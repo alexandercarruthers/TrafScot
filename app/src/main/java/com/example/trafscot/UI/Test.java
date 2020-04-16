@@ -43,6 +43,7 @@ public class Test extends AppCompatActivity {
         simpleExpandableListView.setAdapter(myExpandableListAdapter);
 
         // setOnChildClickListener listener for child row click or song name click
+        //use this to add event handling for clickig on start date, end date etc
         simpleExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {

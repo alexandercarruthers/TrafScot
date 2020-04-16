@@ -1,50 +1,109 @@
 <!--  MPD XML Starter code Semester B Session 2018 2019  -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+
     <!--  MPD XML Starter code Semester B Session 2018 2019  -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/LinearLayout02"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
         <Button
             android:id="@+id/btnCurrentIncidents"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Current Incidents" />
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="Current Incidents"
+            android:textSize="12sp"
 
+            />
         <Button
             android:id="@+id/btnCurrentRoadworks"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Current Roadworks" />
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="Current Roadworks"
+            android:textSize="12sp"
+
+            />
 
         <Button
             android:id="@+id/btnFutureRoadworks"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Future Roadworks" />
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="Future Roadworks"
+            android:textSize="12sp"
 
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LinearLayout03"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
         <Button
-            android:id="@+id/btnRoadworksOnDate"
-            android:layout_width="fill_parent"
+            android:id="@+id/btnGetDate"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Roadworks on date" />
-
+            android:layout_weight="1"
+            android:text="Filter by Date" />
         <Button
-            android:id="@+id/btnTest"
-            android:layout_width="fill_parent"
+            android:id="@+id/btnFilterRoad"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Test" />
-
+            android:layout_weight="1"
+            android:text="Filter by Road" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LinearLayout04"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
         <TextView
-            android:id="@+id/salutation"
-            android:layout_width="wrap_content"
+            android:id="@+id/filterDate"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World!" />
+            android:layout_alignParentTop="true"
+            android:text="aa"
+            android:layout_weight="1"
+            android:textSize="20sp" />
+        <Spinner
+            android:id="@+id/trunkRoadSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/records"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Records: "
+        android:textSize="20sp" />
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear" />
+
+
+
+
+    <ExpandableListView
+        android:id="@+id/simpleExpandableListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="#0f0"
+        android:dividerHeight="1dp" />
+
 
     </LinearLayout>
 
 
-</ScrollView>
+

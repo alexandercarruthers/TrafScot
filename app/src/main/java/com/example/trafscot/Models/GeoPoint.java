@@ -47,10 +47,7 @@ public class GeoPoint implements Parcelable {
 
     @Override
     public String toString() {
-        return "GeoPoint{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return "Location:" + x + "," + y;
     }
 
     @Override

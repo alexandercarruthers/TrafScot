@@ -13,6 +13,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -187,9 +188,18 @@ public class EventDaoImpl  implements EventDao{
         }
         return currentRoadworks;
     }
+
     private List<Event> advanceParseFutureRoadworks(List<Event> rawFutureRoadworks){
         List<Event> futureRoadworks = new ArrayList<>();
         for (Event event : rawFutureRoadworks){
+            String title = event.getTitle();
+            String description = event.getDescription();
+            Date startDate = getRoadworksStartDate(description);
+            Date endDate = getRoadworksEndDate(description);
+            String delayInformation = getDelayInformation(description);
+            String direction = getDirection(title);
+            String disruption = getTypeOfDisruption(title);
+            Long lengthOfDisruptionDays = getDateDiff(startDate,endDate, TimeUnit.DAYS);
             Event roadworkEvent = new EventBuilder()
                     .setTitle(event.getTitle())
                     .setDescription(event.getDescription())
@@ -199,12 +209,12 @@ public class EventDaoImpl  implements EventDao{
                     .setComments(event.getComments())
                     .setPubDate(event.getPubDate())
                     .setTrunkRoad(event.getTrunkRoad())
-                    .setStartDate(new Date())
-                    .setEndDate(new Date())
-                    .setDelayInformation("")
-                    .setDirection("")
-                    .setDisruption("")
-                    .setLengthDisruptionDays(new Long(0))
+                    .setStartDate(startDate)
+                    .setEndDate(endDate)
+                    .setDelayInformation(delayInformation)
+                    .setDirection(direction)
+                    .setDisruption(disruption)
+                    .setLengthDisruptionDays(lengthOfDisruptionDays)
                     .createEvent();
             futureRoadworks.add(roadworkEvent);
         }
@@ -323,6 +333,8 @@ public class EventDaoImpl  implements EventDao{
         }
         return matchedRoadworks;
     }
+
+
 
 
 }

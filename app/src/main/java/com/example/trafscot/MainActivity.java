@@ -1,11 +1,14 @@
 package com.example.trafscot;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.trafscot.Dao.EventDao;
 import com.example.trafscot.Dao.EventDaoImpl;
@@ -20,7 +24,7 @@ import com.example.trafscot.Models.ChildItemsInfo;
 import com.example.trafscot.Models.Event;
 import com.example.trafscot.Models.GroupItemsInfo;
 import com.example.trafscot.Service.MyExpandableListAdapter;
-import com.example.trafscot.UI.RoadworksOnDate;
+import com.example.trafscot.UI.map;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //current selected
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnFutureRoadworks;
     private Button btnClear;
     private Button btnGetDate;
+    private Button btnFilterRoad;
+    private Button btnViewMap;
 
 
 
@@ -59,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Date datePicked;
 
     private TextView filterDate;
-    private TextView filterRoad;
     private TextView records;
 
     private Spinner trunkRoadSpinner;
@@ -85,8 +90,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnGetDate = (Button) findViewById(R.id.btnGetDate);
         btnGetDate.setOnClickListener(this);
 
+        btnFilterRoad = (Button) findViewById(R.id.btnFilterRoad);
+        btnFilterRoad.setOnClickListener(this);
+
+        btnViewMap = (Button) findViewById(R.id.btnViewMap);
+        btnViewMap.setOnClickListener(this);
+
+
+
         filterDate = (TextView)findViewById(R.id.filterDate);
-        
+
+
         records = (TextView)findViewById(R.id.records);
         AsyncTaskExample asyncTask = new AsyncTaskExample();
         asyncTask.execute();
@@ -95,25 +109,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view == btnCurrentIncidents) {
             currentlySelected.addAll(currentIncidents);
+            populateTrunkRoadSpinner(currentlySelected);
             clearExpandingListView();
             loadData(currentIncidents);
             setDataExpandingListView();
 
         }
         if (view == btnCurrentRoadworks) {
-            getAllTrunkRoad(currentRoadworks);
+            //getAllTrunkRoad(currentRoadworks);
             clearExpandingListView();
             currentlySelected.addAll(currentRoadworks);
-            loadData(currentRoadworks);
+            populateTrunkRoadSpinner(currentlySelected);
+            loadData(currentlySelected);
             setDataExpandingListView();
         }
         if (view == btnFutureRoadworks){
             clearExpandingListView();
             currentlySelected.addAll(futureRoadworks);
-            loadData(futureRoadworks);
+            populateTrunkRoadSpinner(currentlySelected);
+            loadData(currentlySelected);
             setDataExpandingListView();
         }
         if (view == btnClear){
+            currentlySelected.clear();
+            populateTrunkRoadSpinner(currentlySelected);
             clearExpandingListView();
         }
         if (view == btnGetDate){
@@ -132,41 +151,64 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             DateFormat dateFormat = new SimpleDateFormat("d-M-y");
                             String strDate = dateFormat.format(datePicked);
                             List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
+                            currentlySelected.clear();
+                            currentlySelected.addAll(filteredRoadworks);
                             filterDate.setText("Date: " + strDate);
                             deptList.clear();
                             songsList.clear();
                             clearOnlyListView();
                             loadData(filteredRoadworks);
                             setDataExpandingListView();
-
+                            populateTrunkRoadSpinner(currentlySelected);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
-
+        }
+        if (view == btnFilterRoad){
+            String filterOnTruckRoad = String.valueOf(trunkRoadSpinner.getSelectedItem());
+            List<Event>  filteredRoadworks = getTrunkRoadFilteredEventList(String.valueOf(trunkRoadSpinner.getSelectedItem()),currentlySelected);
+            currentlySelected.clear();
+            currentlySelected.addAll(filteredRoadworks);
+            deptList.clear();
+            songsList.clear();
+            clearOnlyListView();
+            loadData(filteredRoadworks);
+            setDataExpandingListView();
+            populateTrunkRoadSpinner(currentlySelected);
+        }
+        if (view == btnViewMap){
+            Intent myIntent = new Intent(MainActivity.this, map.class);
+            myIntent.putExtra("x", 2); //Optional parameters
+            myIntent.putExtra("y", 2); //Optional parameters
+            MainActivity.this.startActivity(myIntent);
         }
     }
 
     // Function to remove duplicates from an ArrayList
     public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
     {
-        // Create a new ArrayList
-        ArrayList<T> newList = new ArrayList<T>();
-
-        // Traverse through the first list
-        for (T element : list) {
-
-            // If this element is not present in newList
-            // then add it
-            if (!newList.contains(element)) {
-
+        ArrayList<T> newList = new ArrayList<T>(); // Create a new ArrayList
+        for (T element : list) {// Traverse through the first list
+            if (!newList.contains(element)) {// If this element is not present in newList then add it
                 newList.add(element);
             }
         }
-
-        // return the new list
-        return newList;
+        return newList;// return the new list
     }
 
+    private void populateTrunkRoadSpinner(List<Event> events){
+        ArrayList<String> trunkRoads = new ArrayList<>();
+        for(Event event : events){
+            trunkRoads.add(event.getTrunkRoad());
+        }
+        List<String> setOfTrunkRoads = removeDuplicates(trunkRoads);
+
+        trunkRoadSpinner = (Spinner) findViewById(R.id.trunkRoadSpinner);
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, setOfTrunkRoads);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        trunkRoadSpinner.setAdapter(dataAdapter);
+    }
 
     private void getAllTrunkRoad(List<Event> events){
         ArrayList<String> trunkRoads = new ArrayList<>();
@@ -177,17 +219,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         trunkRoadSpinner = (Spinner) findViewById(R.id.trunkRoadSpinner);
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, setOfTrunkRoads);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, setOfTrunkRoads);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         trunkRoadSpinner.setAdapter(dataAdapter);
+        List<Event>  filteredRoadworks = getTrunkRoadFilteredEventList(String.valueOf(trunkRoadSpinner.getSelectedItem()),events);
         //filterRoad.setText(String.valueOf(trunkRoadSpinner.getSelectedItem()));
+        deptList.clear();
+        songsList.clear();
+        clearOnlyListView();
+        loadData(filteredRoadworks);
+        setDataExpandingListView();
     }
 
 
 
 
     private void resetFilters(){filterDate.setText(""); }
+
+
+    private List<Event> getTrunkRoadFilteredEventList(String trunkRoad, List<Event> eventsToFilter){
+        EventDao eventDao = new EventDaoImpl();
+        List<Event> filteredEvents = eventDao.getMotorwayEvents(trunkRoad,eventsToFilter);
+        return filteredEvents;
+    }
     private List<Event> getFilteredEventList(Date date, List<Event> eventToFilter){
         EventDao eventDao = new EventDaoImpl();
         List<Event> filteredEvents = eventDao.getRoadworksOnDate(date,eventToFilter);
@@ -208,6 +262,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 GroupItemsInfo headerInfo = deptList.get(groupPosition);
                 ChildItemsInfo detailInfo = headerInfo.getSongName().get(childPosition);
+                Log.d("myTag", detailInfo.getName());
+                if (detailInfo.getName().startsWith("Location:")){
+                    String segments[] = detailInfo.getName().split(":");
+                    String xy[] =  segments[1].split(",");
+                    String x = xy[0];
+                    String y = xy[1];
+                    Intent myIntent = new Intent(MainActivity.this, map.class);
+                    myIntent.putExtra("x", x); //Optional parameters
+                    myIntent.putExtra("y", y); //Optional parameters
+                    MainActivity.this.startActivity(myIntent);
+                }
                 return false;
             }
         });
@@ -235,6 +300,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myExpandableListAdapter = new MyExpandableListAdapter(this, emptyTest);
         simpleExpandableListView.setAdapter(myExpandableListAdapter);
     }
+    private String formatDate(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("d-M-y");
+        String strDate = dateFormat.format(date);
+        return strDate;
+    }
     private void loadData(List<Event> data) {
         records.setText("Records: " +  data.size());
         if(data.size() > 0){
@@ -246,18 +316,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //if published date and start date
                 //if 0 dates are the same display only one
                 if(0 == event.getPubDate().compareTo(event.getStartDate())){
-                    addProduct(event.getTitle(), "Start date: " + event.getStartDate().toString());
+                    addProduct(event.getTitle(), "Start date: " + formatDate(event.getStartDate()));
                 }
                 else{ //display both dates as they are different
-                    addProduct(event.getTitle(), "Published: " + event.getPubDate().toString());
-                    addProduct(event.getTitle(), "Start date: " + event.getStartDate().toString());
+                    addProduct(event.getTitle(), "Published: " + formatDate(event.getPubDate()));
+                    addProduct(event.getTitle(), "Start date: " + formatDate(event.getStartDate()));
                 }
 
-                addProduct(event.getTitle(), "End date: " + event.getEndDate().toString());
+                addProduct(event.getTitle(), "End date: " + formatDate(event.getEndDate()) );
                 addProduct(event.getTitle(), "Days of works: " + event.getLengthDisruptionDays().toString());
-                addProduct(event.getTitle(), event.getDescription());
                 //addProduct(event.getTitle(), event.getLink());
-                addProduct(event.getTitle(), event.getPoint().toString());
                 if(!event.getAuthor().equals("")){
                     addProduct(event.getTitle(), event.getAuthor());
                 }
@@ -270,6 +338,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(!event.getDisruption().equals("")){
                     addProduct(event.getTitle(), event.getDisruption());
                 }
+                addProduct(event.getTitle(), event.getPoint().toString());
+                addProduct(event.getTitle(), event.getDescription());
             }
         }else
         {

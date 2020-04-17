@@ -9,18 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.Test"></activity>
-        <activity android:name=".UI.RoadworksOnDate" />
-        <activity android:name=".UI.CurrentIncidents" />
-        <activity android:name=".UI.FutureRoadworks" />
-        <activity android:name=".UI.CurrentRoadworks" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".UI.map"></activity>
+        <activity
+            android:name=".UI.maps"
+            android:label="@string/title_activity_maps"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCDnvcVw68MZgEAmpIw_NDrHk3kdsERaSU" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

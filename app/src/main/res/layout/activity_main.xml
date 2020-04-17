@@ -7,44 +7,44 @@
         android:orientation="vertical"
     >
     <LinearLayout
-        android:id="@+id/LinearLayout02"
+        android:id="@+id/LinearLayout1"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true">
+        android:layout_width="match_parent"        >
         <Button
             android:id="@+id/btnCurrentIncidents"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Current Incidents"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
             android:textSize="12sp"
-
             />
         <Button
             android:id="@+id/btnCurrentRoadworks"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Current Roadworks"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
             android:textSize="12sp"
-
             />
 
         <Button
             android:id="@+id/btnFutureRoadworks"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Future Roadworks"
             android:textSize="12sp"
-
             />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/LinearLayout03"
+        android:id="@+id/LinearLayout2"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true">
+ >
         <Button
             android:id="@+id/btnGetDate"
             android:layout_width="match_parent"
@@ -59,18 +59,16 @@
             android:text="Filter by Road" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/LinearLayout04"
+        android:id="@+id/LinearLayout3"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true">
+        android:layout_width="match_parent">
         <TextView
             android:id="@+id/filterDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="aa"
+            android:text="12-01-2020"
             android:layout_weight="1"
-            android:textSize="20sp" />
+            />
         <Spinner
             android:id="@+id/trunkRoadSpinner"
             android:layout_width="match_parent"
@@ -78,23 +76,35 @@
             android:spinnerMode="dialog"
             android:layout_weight="1"/>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/records"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/LinearLayout4"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="Records: "
-        android:textSize="20sp" />
-    <Button
-        android:id="@+id/btnClear"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear" />
+        android:layout_width="match_parent">
+        <TextView
+            android:id="@+id/records"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Records: "
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:layout_weight="1"
+            />
+        <Button
+            android:id="@+id/btnViewMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Map"
+            android:layout_weight="1"
+            />
 
 
 
-
+    </LinearLayout>
     <ExpandableListView
         android:id="@+id/simpleExpandableListView"
         android:layout_width="match_parent"

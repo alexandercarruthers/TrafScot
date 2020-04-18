@@ -10,9 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -45,16 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     List<Event> currentRoadworks = new ArrayList<>();
     List<Event> futureRoadworks = new ArrayList<>();
     //ui
-    private Button btnCurrentIncidents;
-    private Button btnCurrentRoadworks;
-    private Button btnFutureRoadworks;
     private Button btnClear;
     private Button btnGetDate;
     private Button btnFilterRoad;
     private Button btnViewMap;
-
-
-
     private LinkedHashMap<String, GroupItemsInfo> songsList = new LinkedHashMap<String, GroupItemsInfo>();
     private ArrayList<GroupItemsInfo> deptList = new ArrayList<GroupItemsInfo>();
 
@@ -71,23 +67,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Spinner trunkRoadSpinner;
 
-    private RadioGroup radioRoadworksGroup;
-    private RadioButton radiRoadworksButton;
 
+    private String selecteditem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        btnCurrentIncidents = (Button) findViewById(R.id.btnCurrentIncidents);
-        btnCurrentIncidents.setOnClickListener(this);
-
-        btnCurrentRoadworks = (Button) findViewById(R.id.btnCurrentRoadworks);
-        btnCurrentRoadworks.setOnClickListener(this);
-
-        btnFutureRoadworks = (Button) findViewById(R.id.btnFutureRoadworks);
-        btnFutureRoadworks.setOnClickListener(this);
 
         btnClear = (Button) findViewById(R.id.btnClear);
         btnClear.setOnClickListener(this);
@@ -163,6 +149,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        trunkRoadSpinner = (Spinner) findViewById(R.id.trunkRoadSpinner);
+
+//        trunkRoadSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+//        {
+//            @Override
+//            public void onItemSelected(AdapterView adapter, View v, int i, long lng) {
+//
+////                //String filterOnTruckRoad =  adapter.getItemAtPosition(i).toString();
+////                //or this can be also right: selecteditem = level[i];
+//                String filterOnTruckRoad = String.valueOf(trunkRoadSpinner.getSelectedItem());
+//                List<Event>  filteredRoadworks = getTrunkRoadFilteredEventList(filterOnTruckRoad,currentlySelected);
+//                currentlySelected.clear();
+//                currentlySelected.addAll(filteredRoadworks);
+//                deptList.clear();
+//                songsList.clear();
+//                clearOnlyListView();
+//                loadData(filteredRoadworks);
+//                setDataExpandingListView();
+//
+//            }
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView)
+//            {
+//
+//            }
+//        });
 
         AsyncTaskExample asyncTask = new AsyncTaskExample();
         asyncTask.execute();
@@ -170,28 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void onClick(View view) {
-        if (view == btnCurrentIncidents) {
-            currentlySelected.addAll(currentIncidents);
-            populateTrunkRoadSpinner(currentlySelected);
-            clearExpandingListView();
-            loadData(currentIncidents);
-            setDataExpandingListView();
-        }
-        if (view == btnCurrentRoadworks) {
-            //getAllTrunkRoad(currentRoadworks);
-            clearExpandingListView();
-            currentlySelected.addAll(currentRoadworks);
-            populateTrunkRoadSpinner(currentlySelected);
-            loadData(currentlySelected);
-            setDataExpandingListView();
-        }
-        if (view == btnFutureRoadworks){
-            clearExpandingListView();
-            currentlySelected.addAll(futureRoadworks);
-            populateTrunkRoadSpinner(currentlySelected);
-            loadData(currentlySelected);
-            setDataExpandingListView();
-        }
         if (view == btnClear){
             currentlySelected.clear();
             populateTrunkRoadSpinner(currentlySelected);
@@ -237,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             loadData(filteredRoadworks);
             setDataExpandingListView();
             populateTrunkRoadSpinner(currentlySelected);
+
         }
         if (view == btnViewMap){
             Intent myIntent = new Intent(MainActivity.this, map.class);
@@ -264,40 +255,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             trunkRoads.add(event.getTrunkRoad());
         }
         List<String> setOfTrunkRoads = removeDuplicates(trunkRoads);
-
-        trunkRoadSpinner = (Spinner) findViewById(R.id.trunkRoadSpinner);
-
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, setOfTrunkRoads);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         trunkRoadSpinner.setAdapter(dataAdapter);
     }
-
-    private void getAllTrunkRoad(List<Event> events){
-        ArrayList<String> trunkRoads = new ArrayList<>();
-        for(Event event : events){
-            trunkRoads.add(event.getTrunkRoad());
-        }
-        List<String> setOfTrunkRoads = removeDuplicates(trunkRoads);
-
-        trunkRoadSpinner = (Spinner) findViewById(R.id.trunkRoadSpinner);
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, setOfTrunkRoads);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        trunkRoadSpinner.setAdapter(dataAdapter);
-        List<Event>  filteredRoadworks = getTrunkRoadFilteredEventList(String.valueOf(trunkRoadSpinner.getSelectedItem()),events);
-        //filterRoad.setText(String.valueOf(trunkRoadSpinner.getSelectedItem()));
-        deptList.clear();
-        songsList.clear();
-        clearOnlyListView();
-        loadData(filteredRoadworks);
-        setDataExpandingListView();
-    }
-
-
-
-
-    private void resetFilters(){filterDate.setText(""); }
-
 
     private List<Event> getTrunkRoadFilteredEventList(String trunkRoad, List<Event> eventsToFilter){
         EventDao eventDao = new EventDaoImpl();

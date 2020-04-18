@@ -2,6 +2,8 @@ package com.example.trafscot.Service;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +86,7 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
 
         TextView heading = (TextView) convertView.findViewById(R.id.heading);
         heading.setText(headerInfo.getName().trim());
+
         return convertView;
 
     }
@@ -96,7 +99,14 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.child_items, null);
         }
         TextView childItem = (TextView) convertView.findViewById(R.id.childItem);
-        childItem.setText(detailInfo.getName().trim());
+        String display = detailInfo.getName();
+        childItem.setText(display.trim());
+        if(display.startsWith("Loc")) {
+            childItem.setTextColor(Color.BLUE);
+        }
+        else{
+            childItem.setTextColor(Color.BLACK);
+        }
         return convertView;
     }
 

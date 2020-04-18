@@ -44,75 +44,51 @@
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/LinearLayout1"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"        >
-        <Button
-            android:id="@+id/btnCurrentIncidents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Current Incidents"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:textSize="12sp"
-            />
-        <Button
-            android:id="@+id/btnCurrentRoadworks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Current Roadworks"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:textSize="12sp"
-            />
-
-        <Button
-            android:id="@+id/btnFutureRoadworks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Future Roadworks"
-            android:textSize="12sp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/LinearLayout2"
+        android:id="@+id/LinearLayoutFilterDate"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
- >
+        >
         <Button
             android:id="@+id/btnGetDate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Filter by Date" />
+        <TextView
+            android:id="@+id/filterDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01-01-2020"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LinearLayoutFilterRoad"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" >
+        <TextView
+            android:id="@+id/filterRoad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filter By Road"
+            android:layout_weight="1"
+            />
+
+        <Spinner
+            android:id="@+id/trunkRoadSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btnFilterRoad"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Filter by Road" />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/LinearLayout3"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-        <TextView
-            android:id="@+id/filterDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="12-01-2020"
-            android:layout_weight="1"
-            />
-        <Spinner
-            android:id="@+id/trunkRoadSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dialog"
-            android:layout_weight="1"/>
-    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/LinearLayout4"
         android:layout_height="wrap_content"

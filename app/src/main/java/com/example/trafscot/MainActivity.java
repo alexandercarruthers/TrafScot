@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ExpandableListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,12 +71,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Spinner trunkRoadSpinner;
 
+    private RadioGroup radioRoadworksGroup;
+    private RadioButton radiRoadworksButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); //prevent keyboard popping up
+
         btnCurrentIncidents = (Button) findViewById(R.id.btnCurrentIncidents);
         btnCurrentIncidents.setOnClickListener(this);
 
@@ -96,15 +101,73 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnViewMap = (Button) findViewById(R.id.btnViewMap);
         btnViewMap.setOnClickListener(this);
 
-
-
         filterDate = (TextView)findViewById(R.id.filterDate);
 
-
         records = (TextView)findViewById(R.id.records);
+
+        RadioButton rdb1 = (RadioButton) findViewById(R.id.radioCurrentIncidents);
+        rdb1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checked = ((RadioButton) v).isChecked();
+                // Check which radiobutton was pressed
+                if (checked){
+                    currentlySelected.addAll(currentIncidents);
+                    populateTrunkRoadSpinner(currentlySelected);
+                    clearExpandingListView();
+                    loadData(currentIncidents);
+                    setDataExpandingListView();
+                }
+                else{
+                    // Do your coding
+                }
+            }
+        });
+
+        RadioButton rdb2 = (RadioButton) findViewById(R.id.radioCurrentRoadworks);
+        rdb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checked = ((RadioButton) v).isChecked();
+                // Check which radiobutton was pressed
+                if (checked){
+                    //getAllTrunkRoad(currentRoadworks);
+                    clearExpandingListView();
+                    currentlySelected.addAll(currentRoadworks);
+                    populateTrunkRoadSpinner(currentlySelected);
+                    loadData(currentlySelected);
+                    setDataExpandingListView();
+                }
+                else{
+                    // Do your coding
+                }
+            }
+        });
+
+        RadioButton rdb3 = (RadioButton) findViewById(R.id.radioFutureRoadworks);
+        rdb3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checked = ((RadioButton) v).isChecked();
+                // Check which radiobutton was pressed
+                if (checked){
+                    clearExpandingListView();
+                    currentlySelected.addAll(futureRoadworks);
+                    populateTrunkRoadSpinner(currentlySelected);
+                    loadData(currentlySelected);
+                    setDataExpandingListView();
+                }
+                else{
+                    // Do your coding
+                }
+            }
+        });
+
+
         AsyncTaskExample asyncTask = new AsyncTaskExample();
         asyncTask.execute();
     }
+
 
     public void onClick(View view) {
         if (view == btnCurrentIncidents) {
@@ -113,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             clearExpandingListView();
             loadData(currentIncidents);
             setDataExpandingListView();
-
         }
         if (view == btnCurrentRoadworks) {
             //getAllTrunkRoad(currentRoadworks);
@@ -268,7 +330,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String xy[] =  segments[1].split(",");
                     String x = xy[0];
                     String y = xy[1];
+                    String title = headerInfo.getName();
+                    String start_date = "";
+                    String end_date = "";
+                    ArrayList<ChildItemsInfo> innerList = headerInfo.getSongName();
+                    for(ChildItemsInfo item : innerList){
+                        String inner_list_start_date = item.getName();
+                        if(inner_list_start_date.startsWith("Start Date:")){
+                            start_date = inner_list_start_date;
+                        }
+                        if(inner_list_start_date.startsWith("End Date:")){
+                            end_date = inner_list_start_date;
+                        }
+                    }
                     Intent myIntent = new Intent(MainActivity.this, map.class);
+                    myIntent.putExtra("marker_title",title);
+                    myIntent.putExtra("start_date", start_date); //Optional parameters
+                    myIntent.putExtra("end_date", end_date); //Optional parameters
                     myIntent.putExtra("x", x); //Optional parameters
                     myIntent.putExtra("y", y); //Optional parameters
                     MainActivity.this.startActivity(myIntent);

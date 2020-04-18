@@ -7,6 +7,43 @@
         android:orientation="vertical"
     >
     <LinearLayout
+        android:id="@+id/LinearLayout0"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        >
+        <RadioGroup
+            android:id="@+id/radioRoadworks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioCurrentIncidents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Incidents"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/radioCurrentRoadworks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Roadworks"
+                android:checked="true"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/radioFutureRoadworks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Future Roadworks"
+                android:layout_weight="1"/>
+
+
+        </RadioGroup>
+
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/LinearLayout1"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"        >
@@ -101,9 +138,6 @@
             android:text="Map"
             android:layout_weight="1"
             />
-
-
-
     </LinearLayout>
     <ExpandableListView
         android:id="@+id/simpleExpandableListView"

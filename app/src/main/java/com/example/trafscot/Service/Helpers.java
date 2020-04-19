@@ -24,11 +24,11 @@ public class Helpers {
      * @return
      */
     public int getRoadworksImpact(int days){
-        if (days < 5){
+        if (days < 20){
             return Color.GREEN;
-        } else if (days > 6 && days < 10 ){
+        } else if (days > 20 && days < 60 ){
             return Color.YELLOW;
-        } else if (days > 11) {
+        } else if (days >= 60) {
             return Color.RED;
         }
         return 0;

@@ -3,23 +3,17 @@ package com.example.trafscot.Service;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
-
 import com.example.trafscot.Models.ChildItemsInfo;
-import com.example.trafscot.Models.Event;
 import com.example.trafscot.Models.GroupItemsInfo;
 import com.example.trafscot.R;
-
 import java.util.ArrayList;
 
-/**
- * Created by Gourav for AbhiAndroid on 19-03-2016.
- */
 public class MyExpandableListAdapter implements ExpandableListAdapter {
 
     private Context context;
@@ -84,8 +78,31 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
             convertView = inf.inflate(R.layout.group_items, null);
         }
 
+
         TextView heading = (TextView) convertView.findViewById(R.id.heading);
         heading.setText(headerInfo.getName().trim());
+
+
+
+        //trunk road
+        int iend = headerInfo.getName().indexOf(" ");
+        String motorway = headerInfo.getName();
+        if (iend != -1) {
+            motorway= headerInfo.getName().substring(0 , iend);
+        }
+        TextView icon = (TextView) convertView.findViewById(R.id.icon);
+        icon.setText(motorway);
+
+        ArrayList<ChildItemsInfo> values = headerInfo.getSongName();
+        for(ChildItemsInfo items : values){
+            if (items.getName().startsWith("Days of works")){
+                String segments[] = items.getName().split(": ");
+                String days_value = segments[1];
+                Integer days_of_works = Integer.parseInt(days_value);
+                Helpers helper = new Helpers();
+                icon.setBackgroundColor(helper.getRoadworksImpact(days_of_works));
+            }
+        }
 
         return convertView;
 

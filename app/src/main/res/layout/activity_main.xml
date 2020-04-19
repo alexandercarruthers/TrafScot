@@ -1,11 +1,9 @@
-<!--  MPD XML Starter code Semester B Session 2018 2019  -->
 
-    <!--  MPD XML Starter code Semester B Session 2018 2019  -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-    >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:grid="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <LinearLayout
         android:id="@+id/LinearLayout0"
         android:layout_height="wrap_content"
@@ -29,7 +27,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Roadworks"
-                android:checked="true"
                 android:layout_weight="1"/>
 
             <RadioButton
@@ -43,36 +40,51 @@
         </RadioGroup>
 
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/LinearLayoutFilterDate"
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/GridLayout1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        >
+        android:columnCount="3"
+        android:rowCount="4"
+        android:orientation="horizontal"
+        tools:context=".GridXMLActivity" >
+
+
+        <TextView
+            android:id="@+id/placeholderFilterDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filter By Date"
+
+            android:layout_column="0"
+            android:layout_row="0"
+            />
+        <EditText
+            android:id="@+id/txtFilterDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01-01-2020"
+
+            android:layout_column="1"
+            android:layout_row="0"
+            />
         <Button
             android:id="@+id/btnGetDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Filter by Date" />
-        <TextView
-            android:id="@+id/filterDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="01-01-2020"
-            android:layout_weight="1"
-            />
+            android:text="Filter by Date"
+            android:layout_column="2"
+            android:layout_row="0"/>
 
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/LinearLayoutFilterRoad"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" >
+
         <TextView
             android:id="@+id/filterRoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Filter By Road"
-            android:layout_weight="1"
+            android:layout_column="0"
+            android:layout_row="1"
             />
 
         <Spinner
@@ -80,41 +92,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
-            android:layout_weight="1"/>
+            android:layout_column="1"
+            android:layout_row="1"/>
         <Button
             android:id="@+id/btnFilterRoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Filter by Road" />
-    </LinearLayout>
+            android:text="Filter by Road"
+
+            android:layout_column="2"
+            android:layout_row="1"/>
+
+
+    </GridLayout>
 
     <LinearLayout
-        android:id="@+id/LinearLayout4"
+        android:id="@+id/LinearLayout12"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        >
         <TextView
             android:id="@+id/records"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:text="Records: "
-            android:layout_weight="1"/>
+            android:layout_weight="0.33"/>
         <Button
             android:id="@+id/btnClear"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clear"
-            android:layout_weight="1"
-            />
-        <Button
-            android:id="@+id/btnViewMap"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Map"
-            android:layout_weight="1"
+            android:layout_weight="0.33"
             />
     </LinearLayout>
+
+
+
+
+
     <ExpandableListView
         android:id="@+id/simpleExpandableListView"
         android:layout_width="match_parent"

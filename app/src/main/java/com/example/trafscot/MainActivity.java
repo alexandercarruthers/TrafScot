@@ -31,6 +31,7 @@ import com.example.trafscot.Service.MyExpandableListAdapter;
 import com.example.trafscot.UI.map;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,13 +63,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     DatePickerDialog datePickerDialog;
     Date datePicked;
 
+    private TextView txtFilterDate;
     private TextView filterDate;
     private TextView records;
 
     private Spinner trunkRoadSpinner;
-
-
-    private String selecteditem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +83,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnFilterRoad = (Button) findViewById(R.id.btnFilterRoad);
         btnFilterRoad.setOnClickListener(this);
 
-        btnViewMap = (Button) findViewById(R.id.btnViewMap);
-        btnViewMap.setOnClickListener(this);
-
+        txtFilterDate = (EditText)findViewById(R.id.txtFilterDate);
         filterDate = (TextView)findViewById(R.id.filterDate);
 
         records = (TextView)findViewById(R.id.records);
+        txtFilterDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.set(year, monthOfYear, dayOfMonth);
+                                datePicked = calendar.getTime();
+                                DateFormat dateFormat = new SimpleDateFormat("d-M-y");
+                                String strDate = dateFormat.format(datePicked);
+                                txtFilterDate.setText(strDate);
+//                                List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
+//                                currentlySelected.clear();
+//                                currentlySelected.addAll(filteredRoadworks);
+//                                txtFilterDate.setText("Date: " + strDate);
+//                                deptList.clear();
+//                                songsList.clear();
+//                                clearOnlyListView();
+//                                loadData(filteredRoadworks);
+//                                setDataExpandingListView();
+//                                populateTrunkRoadSpinner(currentlySelected);
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
 
+
+            }
+        });
         RadioButton rdb1 = (RadioButton) findViewById(R.id.radioCurrentIncidents);
         rdb1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,33 +219,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             clearExpandingListView();
         }
         if (view == btnGetDate){
-            final Calendar c = Calendar.getInstance();
-            int mYear = c.get(Calendar.YEAR); // current year
-            int mMonth = c.get(Calendar.MONTH); // current month
-            int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-            // date picker dialog
-            datePickerDialog = new DatePickerDialog(MainActivity.this,
-                    new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.set(year, monthOfYear, dayOfMonth);
-                            datePicked = calendar.getTime();
-                            DateFormat dateFormat = new SimpleDateFormat("d-M-y");
-                            String strDate = dateFormat.format(datePicked);
-                            List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
-                            currentlySelected.clear();
-                            currentlySelected.addAll(filteredRoadworks);
-                            filterDate.setText("Date: " + strDate);
-                            deptList.clear();
-                            songsList.clear();
-                            clearOnlyListView();
-                            loadData(filteredRoadworks);
-                            setDataExpandingListView();
-                            populateTrunkRoadSpinner(currentlySelected);
-                        }
-                    }, mYear, mMonth, mDay);
-            datePickerDialog.show();
+            String string_date_picked = txtFilterDate.getText().toString();
+            Date datePicked = null;
+            try {
+                datePicked = new SimpleDateFormat("d-M-y").parse(string_date_picked);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
+            currentlySelected.clear();
+            currentlySelected.addAll(filteredRoadworks);
+            deptList.clear();
+            songsList.clear();
+            clearOnlyListView();
+            loadData(filteredRoadworks);
+            setDataExpandingListView();
+            populateTrunkRoadSpinner(currentlySelected);
+//            final Calendar c = Calendar.getInstance();
+//            int mYear = c.get(Calendar.YEAR); // current year
+//            int mMonth = c.get(Calendar.MONTH); // current month
+//            int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+//            // date picker dialog
+//            datePickerDialog = new DatePickerDialog(MainActivity.this,
+//                    new DatePickerDialog.OnDateSetListener() {
+//                        @Override
+//                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                            Calendar calendar = Calendar.getInstance();
+//                            calendar.set(year, monthOfYear, dayOfMonth);
+//                            datePicked = calendar.getTime();
+//                            DateFormat dateFormat = new SimpleDateFormat("d-M-y");
+//                            String strDate = dateFormat.format(datePicked);
+//                            List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
+//                            currentlySelected.clear();
+//                            currentlySelected.addAll(filteredRoadworks);
+//                            txtFilterDate.setText("Date: " + strDate);
+//                            deptList.clear();
+//                            songsList.clear();
+//                            clearOnlyListView();
+//                            loadData(filteredRoadworks);
+//                            setDataExpandingListView();
+//                            populateTrunkRoadSpinner(currentlySelected);
+//                        }
+//                    }, mYear, mMonth, mDay);
+//            datePickerDialog.show();
         }
         if (view == btnFilterRoad){
             String filterOnTruckRoad = String.valueOf(trunkRoadSpinner.getSelectedItem());
@@ -285,7 +332,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 GroupItemsInfo headerInfo = deptList.get(groupPosition);
                 ChildItemsInfo detailInfo = headerInfo.getSongName().get(childPosition);
-                Log.d("myTag", detailInfo.getName());
                 if (detailInfo.getName().startsWith("Location:")){
                     String segments[] = detailInfo.getName().split(":");
                     String xy[] =  segments[1].split(",");
@@ -332,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void clearExpandingListView(){
         currentlySelected.clear();
         records.setText("Records: ");
-        filterDate.setText("");
+        txtFilterDate.setText("");
         deptList.clear();
         songsList.clear();
         simpleExpandableListView = (ExpandableListView) findViewById(R.id.simpleExpandableListView);

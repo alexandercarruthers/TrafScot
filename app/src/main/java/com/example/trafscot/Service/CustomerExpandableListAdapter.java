@@ -88,7 +88,6 @@ public class CustomerExpandableListAdapter implements ExpandableListAdapter {
                 String segments[] = items.getName().split(": ");
                 String days_value = segments[1];
                 Integer days_of_works = Integer.parseInt(days_value);
-                Helpers helper = new Helpers();
                 icon.setBackgroundColor(Color.parseColor(getRoadworksImpact(days_of_works)));
             }
         }

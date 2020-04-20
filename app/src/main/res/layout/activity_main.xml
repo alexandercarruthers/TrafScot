@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -56,14 +57,16 @@
         </RadioGroup>
 
     </LinearLayout>
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <GridLayout
         android:id="@+id/GridLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="4"
         android:orientation="horizontal"
+        android:useDefaultMargins="true"
+        android:verticalSpacing="40sp"
+        android:horizontalSpacing="40sp"
         tools:context=".GridXMLActivity" >
 
 
@@ -85,18 +88,25 @@
             android:textColor="@color/text"
             android:layout_column="1"
             android:layout_row="0"
+            android:inputType="none"
+            android:focusableInTouchMode="true"
+            android:cursorVisible="false"
+            android:focusable="false"
             />
+
+
         <Button
             android:id="@+id/btnFilterDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
-            android:text="Filter by Date"
-            android:layout_column="2"
-            android:textColor="@color/mainBG"
-            android:background="@drawable/button"
-            android:layout_row="0"/>
 
+            android:layout_row="0"
+            android:layout_column="2"
+            android:background="@drawable/button"
+            android:text="Filter by Date"
+
+            android:textColor="@color/mainBG" />
 
         <TextView
             android:id="@+id/placeholderFilterRoad"
@@ -110,7 +120,7 @@
 
         <Spinner
             android:id="@+id/trunkRoadSpinner"
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
             android:spinnerMode="dialog"

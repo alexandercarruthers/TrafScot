@@ -3,8 +3,10 @@ package com.example.trafscot;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,6 +40,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -140,6 +144,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.action_help:
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                final Dialog dialog = new Dialog(MainActivity.this);
+
+                //setting custom layout to dialog
+                dialog.setContentView(R.layout.custom_dialog_layout);
+                //TextView dialogTitle = (TextView) dialog.findViewById(R.id.title);
+                //dialogTitle.setText("Days of roadworks, indicated by colour");
+                List<String> delayDescs = Arrays.asList("< 10 ", "> 20 ", "> 60 ");
+                List<String> delayColours = Arrays.asList("#ffd460", "#f07b3f", "#ea5455");
+                int[] descTextViewIDs = new int[] {R.id.shortDelayDesc, R.id.mediumDelayDesc, R.id.longDelayDesc};
+                int[] iconTextViewIDs = new int[] {R.id.shortDelayIcon, R.id.mediumDelayIcon, R.id.longDelayIcon};
+                for (int i = 0; i < delayDescs.size(); i++) {
+                    String resource_delayColor = delayColours.get(i);
+                    String resource_delayDesc = delayDescs.get(i);
+                    TextView tv = (TextView) dialog.findViewById(descTextViewIDs[i]);
+                    tv.setText(resource_delayDesc);
+                    TextView iconTextView = (TextView) dialog.findViewById(iconTextViewIDs[i]);
+                    iconTextView.setText("M8");
+                    iconTextView.setBackgroundColor(Color.parseColor(resource_delayColor));
+                }
+
+//                TextView tv = dialog.findViewById(R.id.shortDelayDesc);
+//                tv.setText("< 10 days delay");
+//                TextView iconTextView = (TextView) dialog.findViewById(R.id.shortDelayIcon);
+//                iconTextView.setText("M8");
+//                iconTextView.setBackgroundColor(Color.parseColor("#ffd460"));
+                dialog.show();
+
+
+
+
+
                 return true;
 
             default:

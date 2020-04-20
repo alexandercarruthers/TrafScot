@@ -2,14 +2,14 @@ package com.example.trafscot.Models;
 
 public class ChildItemsInfo {
 
-    private String songName = "";
+    private String subItemName = "";
 
     public String getName() {
-        return songName;
+        return subItemName;
     }
 
-    public void setName(String songName) {
-        this.songName = songName;
+    public void setName(String subItem) {
+        this.subItemName = subItem;
     }
 
 }

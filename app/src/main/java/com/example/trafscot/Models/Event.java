@@ -1,11 +1,7 @@
 package com.example.trafscot.Models;
-
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.Date;
 
-public  class Event implements Parcelable {
+public  class Event{
     //Declare variables as private final
     private final String title;
     private final String description;
@@ -23,63 +19,7 @@ public  class Event implements Parcelable {
     private final Long lengthDisruptionDays;
 
     @Override
-    public String toString() {
-        return title ;
-    }
-
-    public static final Creator<Event> CREATOR = new Creator<Event>() {
-        @Override
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        @Override
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(title);
-        parcel.writeString(description);
-        parcel.writeString(link);
-        parcel.writeParcelable(point,i);
-        parcel.writeString(author);
-        parcel.writeString(comments);
-        parcel.writeLong(pubDate.getTime());
-        parcel.writeString(trunkRoad);
-        parcel.writeLong(startDate.getTime());
-        parcel.writeLong(endDate.getTime());
-        parcel.writeString(delayInformation);
-        parcel.writeString(direction);
-        parcel.writeString(disruption);
-        parcel.writeLong(lengthDisruptionDays);
-
-    }
-    public Event(Parcel in){
-        this.title = in.readString();
-        this.description = in.readString();
-        this.link = in.readString();
-        this.point = in.readParcelable(GeoPoint.class.getClassLoader());
-        this.author = in.readString();
-        this.comments = in.readString();
-        this.pubDate = new Date(in.readLong());
-        this.trunkRoad = in.readString();
-        this.startDate = new Date(in.readLong());
-        this.endDate = new Date(in.readLong());
-        this.delayInformation = in.readString();
-        this.direction = in.readString();
-        this.disruption = in.readString();
-        this.lengthDisruptionDays = in.readLong();
-    }
-
-
+    public String toString() { return title ; }
     //Generate normal constructor with all variables set constructor to private
     Event(String title, String description, String link, GeoPoint point, String author, String comments, Date pubDate, String trunkRoad, Date startDate, Date endDate, String delayInformation, String direction, String disruption, Long lengthDisruptionDays) {
         this.title = title;
@@ -110,9 +50,7 @@ public  class Event implements Parcelable {
         return link;
     }
 
-    public GeoPoint getPoint() {
-        return point;
-    }
+    public GeoPoint getPoint() { return point; }
 
     public String getAuthor() {
         return author;
@@ -153,6 +91,4 @@ public  class Event implements Parcelable {
     public Long getLengthDisruptionDays() {
         return lengthDisruptionDays;
     }
-
-
 }

@@ -1,41 +1,32 @@
 package com.example.trafscot.Service;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
-
-import androidx.core.content.ContextCompat;
-
 import com.example.trafscot.Models.ChildItemsInfo;
 import com.example.trafscot.Models.GroupItemsInfo;
 import com.example.trafscot.R;
 import java.util.ArrayList;
 
-public class MyExpandableListAdapter implements ExpandableListAdapter {
+public class CustomerExpandableListAdapter implements ExpandableListAdapter {
 
     private Context context;
     private ArrayList<GroupItemsInfo> teamName;
 
-    public MyExpandableListAdapter(Context context, ArrayList<GroupItemsInfo> deptList) {
+    public CustomerExpandableListAdapter(Context context, ArrayList<GroupItemsInfo> deptList) {
         this.context = context;
         this.teamName = deptList;
     }
     @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-
-    }
+    public void registerDataSetObserver(DataSetObserver observer) {    }
 
     @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-
-    }
+    public void unregisterDataSetObserver(DataSetObserver observer) {    }
 
     @Override
     public int getGroupCount() {
@@ -44,7 +35,7 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        ArrayList<ChildItemsInfo> productList = teamName.get(groupPosition).getSongName();
+        ArrayList<ChildItemsInfo> productList = teamName.get(groupPosition).getEventName();
         return productList.size();
     }
 
@@ -55,7 +46,7 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        ArrayList<ChildItemsInfo> productList = teamName.get(groupPosition).getSongName();
+        ArrayList<ChildItemsInfo> productList = teamName.get(groupPosition).getEventName();
         return productList.get(childPosition);
     }
 
@@ -81,13 +72,8 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
             LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inf.inflate(R.layout.group_items, null);
         }
-
-
         TextView heading = (TextView) convertView.findViewById(R.id.heading);
         heading.setText(headerInfo.getName().trim());
-
-
-
         //trunk road
         int iend = headerInfo.getName().indexOf(" ");
         String motorway = headerInfo.getName();
@@ -96,8 +82,7 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
         }
         TextView icon = (TextView) convertView.findViewById(R.id.icon);
         icon.setText(motorway);
-
-        ArrayList<ChildItemsInfo> values = headerInfo.getSongName();
+        ArrayList<ChildItemsInfo> values = headerInfo.getEventName();
         for(ChildItemsInfo items : values){
             if (items.getName().startsWith("Days of works")){
                 String segments[] = items.getName().split(": ");
@@ -107,9 +92,7 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
                 icon.setBackgroundColor(Color.parseColor(getRoadworksImpact(days_of_works)));
             }
         }
-
         return convertView;
-
     }
 
     private String getRoadworksImpact(int days){
@@ -160,14 +143,10 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
     }
 
     @Override
-    public void onGroupExpanded(int groupPosition) {
-
-    }
+    public void onGroupExpanded(int groupPosition) {   }
 
     @Override
-    public void onGroupCollapsed(int groupPosition) {
-
-    }
+    public void onGroupCollapsed(int groupPosition) {    }
 
     @Override
     public long getCombinedChildId(long groupId, long childId) {

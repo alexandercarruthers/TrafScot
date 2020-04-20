@@ -1,9 +1,6 @@
 package com.example.trafscot.Models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class GeoPoint implements Parcelable {
+public class GeoPoint {
     public double x;
     public double y;
 
@@ -11,24 +8,6 @@ public class GeoPoint implements Parcelable {
         this.x = x;
         this.y = y;
     }
-
-    protected GeoPoint(Parcel in) {
-        x = in.readDouble();
-        y = in.readDouble();
-    }
-
-    public static final Creator<GeoPoint> CREATOR = new Creator<GeoPoint>() {
-        @Override
-        public GeoPoint createFromParcel(Parcel in) {
-            return new GeoPoint(in);
-        }
-
-        @Override
-        public GeoPoint[] newArray(int size) {
-            return new GeoPoint[size];
-        }
-    };
-
     public double getX() {
         return x;
     }
@@ -50,14 +29,4 @@ public class GeoPoint implements Parcelable {
         return "Location:" + x + "," + y;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeDouble(x);
-        parcel.writeDouble(y);
-    }
 }

@@ -1,7 +1,4 @@
 package com.example.trafscot.Dao;
-
-import android.os.AsyncTask;
-
 import com.example.trafscot.Models.Event;
 import com.example.trafscot.Models.EventBuilder;
 import com.example.trafscot.Models.GeoPoint;
@@ -13,7 +10,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -145,12 +141,12 @@ public class EventDaoImpl  implements EventDao{
                     .setComments(event.getComments())
                     .setPubDate(event.getPubDate())
                     .setTrunkRoad(event.getTrunkRoad())
-                    .setStartDate(new Date())
-                    .setEndDate(new Date())
+                    .setStartDate(new Date()) //not published for current incident
+                    .setEndDate(new Date())  //not published for current incident
                     .setDelayInformation("")
                     .setDirection("")
                     .setDisruption("")
-                    .setLengthDisruptionDays(new Long(0))
+                    .setLengthDisruptionDays(new Long(0)) //no publication date
                     .createEvent();
             currentIncidents.add(roadworkEvent);
         }
@@ -220,9 +216,6 @@ public class EventDaoImpl  implements EventDao{
         }
         return futureRoadworks;
     }
-
-
-    @Override
     public List<Event> getMotorwayEvents(String searchForMotorway, List<Event> events) {
         List<Event> matchedEvents = new ArrayList<>();
         for (Event event : events){
@@ -283,7 +276,6 @@ public class EventDaoImpl  implements EventDao{
     private String getDirection(String title){
         List<String> directions = Arrays.asList("NB", "SB", "WB", "EB");
         String directionFound = "";
-        //String title = event.getTitle();
         for(String direction : directions){
             if(title.contains(direction)){
                 directionFound = direction;
@@ -320,8 +312,6 @@ public class EventDaoImpl  implements EventDao{
         return disruption;
     }
 
-
-    @Override
     public List<Event> getRoadworksOnDate(Date searchForDate, List<Event> roadworks) {
         List<Event> matchedRoadworks = new ArrayList<>();
         for (Event roadwork : roadworks){
@@ -333,8 +323,4 @@ public class EventDaoImpl  implements EventDao{
         }
         return matchedRoadworks;
     }
-
-
-
-
 }

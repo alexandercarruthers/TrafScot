@@ -4,22 +4,22 @@ import java.util.ArrayList;
 public class GroupItemsInfo {
 
     private String listName;
-    private ArrayList<ChildItemsInfo> list = new ArrayList<ChildItemsInfo>();
+    private ArrayList<ChildItemsInfo> innerItemList = new ArrayList<ChildItemsInfo>();
 
     public String getName() {
         return listName;
     }
 
-    public void setName(String songListName) {
-        this.listName = songListName;
+    public void setName(String eventListName) {
+        this.listName = eventListName;
     }
 
-    public ArrayList<ChildItemsInfo> getSongName() {
-        return list;
+    public ArrayList<ChildItemsInfo> getEventName() {
+        return innerItemList;
     }
 
-    public void setPlayerName(ArrayList<ChildItemsInfo> songName) {
-        this.list = songName;
+    public void setInnerItemName(ArrayList<ChildItemsInfo> eventName) {
+        this.innerItemList = eventName;
     }
 
 }

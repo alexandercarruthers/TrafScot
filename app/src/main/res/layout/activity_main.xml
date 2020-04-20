@@ -167,7 +167,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@color/primary"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:groupIndicator="@drawable/custom_expandable"/>
 
 
     </LinearLayout>

@@ -2,7 +2,6 @@ package com.example.trafscot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 
 import android.view.MenuItem;
@@ -35,7 +31,7 @@ import com.example.trafscot.Dao.EventDaoImpl;
 import com.example.trafscot.Models.ChildItemsInfo;
 import com.example.trafscot.Models.Event;
 import com.example.trafscot.Models.GroupItemsInfo;
-import com.example.trafscot.Service.MyExpandableListAdapter;
+import com.example.trafscot.Service.CustomerExpandableListAdapter;
 import com.example.trafscot.UI.Map;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnFilterRoad;
     private LinkedHashMap<String, GroupItemsInfo> songsList = new LinkedHashMap<String, GroupItemsInfo>();
     private ArrayList<GroupItemsInfo> deptList = new ArrayList<GroupItemsInfo>();
-    private MyExpandableListAdapter myExpandableListAdapter;
+    private CustomerExpandableListAdapter myExpandableListAdapter;
     private ExpandableListView simpleExpandableListView;
 
 
@@ -330,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return filteredEvents;
     }
     private void setDataExpandingListView(){
-        myExpandableListAdapter = new MyExpandableListAdapter(this, deptList);
+        myExpandableListAdapter = new CustomerExpandableListAdapter(this, deptList);
         // attach the adapter to the expandable list view
         simpleExpandableListView.setAdapter(myExpandableListAdapter);
         // setOnChildClickListener listener for child row click or song name click
@@ -339,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 GroupItemsInfo headerInfo = deptList.get(groupPosition);
-                ChildItemsInfo detailInfo = headerInfo.getSongName().get(childPosition);
+                ChildItemsInfo detailInfo = headerInfo.getEventName().get(childPosition);
                 if (detailInfo.getName().startsWith("Location:")){
                     String segments[] = detailInfo.getName().split(":");
                     String xy[] =  segments[1].split(",");
@@ -349,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String start_date = "";
                     String end_date = "";
                     String days_of_works = "";
-                    ArrayList<ChildItemsInfo> innerList = headerInfo.getSongName();
+                    ArrayList<ChildItemsInfo> innerList = headerInfo.getEventName();
                     for(ChildItemsInfo item : innerList){
                         String inner_list_start_date = item.getName();
                         if(inner_list_start_date.startsWith("Start date:")){
@@ -385,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void clearOnlyListView(){
         ArrayList<GroupItemsInfo> emptyList = new ArrayList<GroupItemsInfo>();
-        myExpandableListAdapter = new MyExpandableListAdapter(this, emptyList);
+        myExpandableListAdapter = new CustomerExpandableListAdapter(this, emptyList);
         simpleExpandableListView.setAdapter(myExpandableListAdapter);
     }
     private void clearExpandingListView(){
@@ -451,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             deptList.add(headerInfo);
         }
         // get the children for the group
-        ArrayList<ChildItemsInfo> productList = headerInfo.getSongName();
+        ArrayList<ChildItemsInfo> productList = headerInfo.getEventName();
         // size of the children list
         int listSize = productList.size();
         // add to the counter
@@ -460,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ChildItemsInfo detailInfo = new ChildItemsInfo();
         detailInfo.setName(roadworkDetail);
         productList.add(detailInfo);
-        headerInfo.setPlayerName(productList);
+        headerInfo.setInnerItemName(productList);
         // find the group position inside the list
         groupPosition = deptList.indexOf(headerInfo);
     }

@@ -1,5 +1,6 @@
 package com.example.trafscot.Service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
@@ -9,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+
 import com.example.trafscot.Models.ChildItemsInfo;
 import com.example.trafscot.Models.GroupItemsInfo;
 import com.example.trafscot.R;
@@ -100,13 +104,25 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
                 String days_value = segments[1];
                 Integer days_of_works = Integer.parseInt(days_value);
                 Helpers helper = new Helpers();
-                icon.setBackgroundColor(helper.getRoadworksImpact(days_of_works));
+                icon.setBackgroundColor(Color.parseColor(getRoadworksImpact(days_of_works)));
             }
         }
 
         return convertView;
 
     }
+
+    private String getRoadworksImpact(int days){
+        if (days < 20){
+            return "#ffd460";  // yellow
+        } else if (days > 20 && days < 60 ){
+            return "#f07b3f"; // orange
+        } else if (days >= 60) {
+            return "#ea5455"; // red
+        }
+        return "#222831"; //off black
+    }
+
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -122,7 +138,8 @@ public class MyExpandableListAdapter implements ExpandableListAdapter {
             childItem.setTextColor(Color.BLUE);
         }
         else{
-            childItem.setTextColor(Color.BLACK);
+            int color = Integer.parseInt("00a8cc", 16)+0xFF000000;
+            childItem.setTextColor(color);
         }
         return convertView;
     }

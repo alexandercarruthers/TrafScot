@@ -40,7 +40,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnGetDate"
+                    android:id="@+id/btnFilterDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -63,7 +63,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/filterDate"
+                    android:id="@+id/txtFilterDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

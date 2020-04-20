@@ -22,8 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:text="Records: "
-            android:layout_weight="9"/>
+            android:text=""
+            android:layout_weight="8"/>
     </LinearLayout>
 
 </LinearLayout>

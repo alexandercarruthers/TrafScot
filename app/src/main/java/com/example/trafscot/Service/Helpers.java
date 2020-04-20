@@ -1,7 +1,10 @@
 package com.example.trafscot.Service;
 
-import android.graphics.Color;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.IconCompat;
+
+import com.example.trafscot.R;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -18,19 +21,5 @@ public class Helpers {
         return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 
-    /**
-     *
-     * @param days
-     * @return
-     */
-    public int getRoadworksImpact(int days){
-        if (days < 20){
-            return Color.GREEN;
-        } else if (days > 20 && days < 60 ){
-            return Color.YELLOW;
-        } else if (days >= 60) {
-            return Color.RED;
-        }
-        return 0;
-    }
+
 }

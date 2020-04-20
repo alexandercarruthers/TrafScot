@@ -1,9 +1,17 @@
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:grid="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/mainBG">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     <LinearLayout
         android:id="@+id/LinearLayout0"
         android:layout_height="wrap_content"
@@ -13,13 +21,17 @@
             android:id="@+id/radioRoadworks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+
+            >
 
             <RadioButton
                 android:id="@+id/radioCurrentIncidents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Incidents"
+                android:textColor="@color/text"
+                android:buttonTint="@color/text"
                 android:layout_weight="1"/>
 
             <RadioButton
@@ -27,6 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Roadworks"
+                android:textColor="@color/text"
+                android:buttonTint="@color/text"
                 android:layout_weight="1"/>
 
             <RadioButton
@@ -34,6 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Future Roadworks"
+                android:textColor="@color/text"
+                android:buttonTint="@color/text"
                 android:layout_weight="1"/>
 
 
@@ -43,7 +59,7 @@
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/GridLayout1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="4"
@@ -56,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Filter By Date"
-
+            android:textColor="@color/text"
             android:layout_column="0"
             android:layout_row="0"
             />
@@ -64,25 +80,30 @@
             android:id="@+id/txtFilterDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="01-01-2020"
-
+            android:text="@string/date_placeholder"
+            android:background="@drawable/textview"
+            android:textColor="@color/text"
             android:layout_column="1"
             android:layout_row="0"
             />
         <Button
-            android:id="@+id/btnGetDate"
+            android:id="@+id/btnFilterDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
             android:text="Filter by Date"
             android:layout_column="2"
+            android:textColor="@color/mainBG"
+            android:background="@drawable/button"
             android:layout_row="0"/>
 
 
         <TextView
-            android:id="@+id/filterRoad"
+            android:id="@+id/placeholderFilterRoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Filter By Road"
+            android:textColor="@color/text"
             android:layout_column="0"
             android:layout_row="1"
             />
@@ -91,42 +112,52 @@
             android:id="@+id/trunkRoadSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
             android:spinnerMode="dialog"
+            android:textColor="@color/text"
+            android:backgroundTint="@color/text"
             android:layout_column="1"
             android:layout_row="1"/>
         <Button
             android:id="@+id/btnFilterRoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
             android:text="Filter by Road"
-
+            android:textColor="@color/mainBG"
+            android:background="@drawable/button"
             android:layout_column="2"
             android:layout_row="1"/>
 
-
-    </GridLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout12"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        >
-        <TextView
-            android:id="@+id/records"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="Records: "
-            android:layout_weight="0.33"/>
         <Button
             android:id="@+id/btnClear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
             android:text="Clear"
-            android:layout_weight="0.33"
-            />
-    </LinearLayout>
-
+            android:textColor="@color/mainBG"
+            android:background="@drawable/button"
+            android:layout_column="2"
+            android:layout_row="2"/>
+        <TextView
+            android:id="@+id/placeholderRecords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="@string/records_placeholder"
+            android:textColor="@color/text"
+            android:layout_column="0"
+            android:layout_row="2"/>
+        <TextView
+            android:id="@+id/txtRecords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="0"
+            android:textColor="@color/text"
+            android:layout_column="1"
+            android:layout_row="2"/>
+    </GridLayout>
 
 
 
@@ -135,7 +166,7 @@
         android:id="@+id/simpleExpandableListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="#0f0"
+        android:divider="@color/primary"
         android:dividerHeight="1dp" />
 
 

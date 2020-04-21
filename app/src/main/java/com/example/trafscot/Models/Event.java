@@ -3,6 +3,9 @@ package com.example.trafscot.Models;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class Event {
     //Declare variables as private final
     private final String title;

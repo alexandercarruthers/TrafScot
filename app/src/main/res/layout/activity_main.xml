@@ -1,3 +1,4 @@
+<!--Alexander Carruthers - S1828301-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -5,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/mainBG">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -13,19 +15,17 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <LinearLayout
         android:id="@+id/LinearLayout0"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        >
+        android:layout_width="match_parent">
+
         <RadioGroup
             android:id="@+id/radioRoadworks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-
-
-            >
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/radioCurrentIncidents"
@@ -56,12 +56,8 @@
                 android:buttonTint="@color/text"
                 android:layout_weight="1"
                 android:textSize="20sp" />
-
-
         </RadioGroup>
-
     </LinearLayout>
-
 
     <GridLayout
         android:id="@+id/GridLayout1"
@@ -75,7 +71,6 @@
         android:useDefaultMargins="true"
         android:verticalSpacing="40sp"
         tools:context=".GridXMLActivity">
-
 
         <Button
             android:id="@+id/btnFilterDate"
@@ -100,7 +95,6 @@
             android:padding="10sp"
             android:text="Filter by Road"
             android:textColor="@color/mainBG" />
-
 
         <Button
             android:id="@+id/btnClear"
@@ -192,8 +186,6 @@
         android:divider="@color/primary"
         android:dividerHeight="1dp"
         android:groupIndicator="@drawable/custom_expandable"/>
-
-
 </LinearLayout>
 
 

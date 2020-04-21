@@ -13,6 +13,9 @@ import com.example.trafscot.Models.GroupItemsInfo;
 import com.example.trafscot.R;
 import java.util.ArrayList;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class CustomerExpandableListAdapter implements ExpandableListAdapter {
 
     private Context context;
@@ -22,6 +25,11 @@ public class CustomerExpandableListAdapter implements ExpandableListAdapter {
         this.context = context;
         this.teamName = deptList;
     }
+
+    public CustomerExpandableListAdapter() {
+
+    }
+
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {    }
 
@@ -94,8 +102,8 @@ public class CustomerExpandableListAdapter implements ExpandableListAdapter {
         return convertView;
     }
 
-    private String getRoadworksImpact(int days){
-        if (days < 20){
+    public String getRoadworksImpact(int days) {
+        if (days <= 20) {
             return "#ffd460";  // yellow
         } else if (days > 20 && days < 60 ){
             return "#f07b3f"; // orange

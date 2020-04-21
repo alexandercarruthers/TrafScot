@@ -4,6 +4,9 @@ import com.example.trafscot.Models.Event;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public interface EventDao {
     List<Event> getAllCurrentIncidents();
     List<Event> getAllCurrentRoadworks();

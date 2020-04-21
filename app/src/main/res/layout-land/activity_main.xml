@@ -1,3 +1,4 @@
+<!--Alexander Carruthers - S1828301-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -14,7 +15,6 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,10 +37,7 @@
                     android:id="@+id/radioRoadworks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-
-
-                    >
+                    android:orientation="vertical">
 
                     <RadioButton
                         android:id="@+id/radioCurrentIncidents"
@@ -71,10 +68,7 @@
                         android:buttonTint="@color/text"
                         android:layout_weight="1"
                         android:textSize="20sp" />
-
-
                 </RadioGroup>
-
             </LinearLayout>
 
             <LinearLayout
@@ -94,7 +88,6 @@
                     android:rowCount="4"
                     tools:context=".GridXMLActivity">
 
-
                     <Button
                         android:id="@+id/btnFilterDate"
                         android:layout_width="130sp"
@@ -104,7 +97,6 @@
                         android:background="@drawable/button"
                         android:padding="10sp"
                         android:text="Filter by Date"
-
                         android:textColor="@color/mainBG" />
 
                     <Button
@@ -117,7 +109,6 @@
                         android:padding="10sp"
                         android:text="Filter by Road"
                         android:textColor="@color/mainBG" />
-
 
                     <Button
                         android:id="@+id/btnClear"
@@ -201,8 +192,6 @@
                         android:textSize="20sp" />
                 </GridLayout>
             </LinearLayout>
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -219,11 +208,7 @@
                 android:dividerHeight="1dp"
                 android:groupIndicator="@drawable/custom_expandable" />
         </LinearLayout>
-
-
     </LinearLayout>
-
-
 </LinearLayout>
 
 

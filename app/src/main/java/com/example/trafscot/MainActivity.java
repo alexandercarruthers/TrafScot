@@ -44,6 +44,9 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //data
     List<Event> currentlySelected = new ArrayList<>();
@@ -127,8 +130,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Context applicationContext = getApplicationContext();
         int toastLength = Toast.LENGTH_SHORT;
         String text = "";
-        String noNet = "No network connectivity";
-        String net = "Network connection established";
+        String noNet = "Network connection not available";
+        String net = "Network connection available";
         if (!haveNetworkConnection()) {
             text = noNet;
         } else {
@@ -161,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnFilterRoad.setOnClickListener(this);
         btnClear.setOnClickListener(this);
     }
+
     private boolean haveNetworkConnection() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
@@ -201,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
+
     private void refreshExpandedListView(List<Event> currentData){
         currentlySelected.clear();
         clearExpandingListView();
@@ -209,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadData(currentlySelected);
         setDataExpandingListView();
     }
+
     public void setCustomRadioButtonListeners(){
         rdbCurrentIncidents.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,6 +251,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currentlySelected.clear();
             populateTrunkRoadSpinner(currentlySelected);
             clearExpandingListView();
+            radioGroupRoadworks.clearCheck();
+            txtFilterDate.setText(R.string.date_placeholder);
         }
         if (view == btnFilterDate){
             String string_date_picked = txtFilterDate.getText().toString();
@@ -267,8 +275,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
-    {
+    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
         ArrayList<T> newList = new ArrayList<T>(); // Create a new ArrayList
         for (T element : list) {// Traverse through the first list
             if (!newList.contains(element)) {// If this element is not present in newList then add it
@@ -277,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return newList;// return the new list
     }
+
     private void populateTrunkRoadSpinner(List<Event> events){
         ArrayList<String> trunkRoads = new ArrayList<>();
         for(Event event : events){
@@ -292,10 +300,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EventDao eventDao = new EventDaoImpl();
         return eventDao.getMotorwayEvents(trunkRoad, eventsToFilter);
     }
+
     private List<Event> getFilteredEventList(Date date, List<Event> eventToFilter){
         EventDao eventDao = new EventDaoImpl();
         return eventDao.getRoadworksOnDate(date, eventToFilter);
     }
+
     private void setDataExpandingListView(){
         myExpandableListAdapter = new CustomerExpandableListAdapter(this, titlesList);
         // attach the adapter to the expandable list view
@@ -355,20 +365,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myExpandableListAdapter = new CustomerExpandableListAdapter(this, emptyList);
         simpleExpandableListView.setAdapter(myExpandableListAdapter);
     }
+
     private void clearExpandingListView(){
-        radioGroupRoadworks.clearCheck();
         currentlySelected.clear();
         txtRecords.setText("0");
-        txtFilterDate.setText(R.string.date_placeholder);
         titlesList.clear();
         detailsOfTitlesList.clear();
         clearOnlyListView();
     }
+
     private String formatDate(Date date){
         return dateFormat.format(date);
     }
+
     private void loadData(List<Event> data) {
-        txtRecords.setText(data.size());
+        txtRecords.setText(data.size() + "");
         if(data.size() > 0){
             for(Event event : data){
                 addProduct(event.getTitle(), "Trunk Road: " + event.getTrunkRoad());
@@ -378,8 +389,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //if published date and start date = 0; dates are the same display only one
                 if(0 == event.getPubDate().compareTo(event.getStartDate())){
                     addProduct(event.getTitle(), "Start date: " + formatDate(event.getStartDate()));
-                }
-                else{ //display both dates as they are different
+                } else{ //display both dates as they are different
                     addProduct(event.getTitle(), "Published: " + formatDate(event.getPubDate()));
                     addProduct(event.getTitle(), "Start date: " + formatDate(event.getStartDate()));
                 }
@@ -399,9 +409,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 addProduct(event.getTitle(), event.getPoint().toString());
             }
-        }else
-        {
-            addProduct("No data", "");
         }
     }
 
@@ -443,6 +450,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             futureRoadworks = eventDao.getAllFutureRoadworks();
             return null;
         }
+
         @Override
         protected void onPostExecute(Void v) {
             displayNetworkConnection();

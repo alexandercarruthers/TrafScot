@@ -1,5 +1,8 @@
 package com.example.trafscot.Models;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class GeoPoint {
     public double x;
     public double y;

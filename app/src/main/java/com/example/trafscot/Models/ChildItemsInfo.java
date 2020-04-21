@@ -1,5 +1,8 @@
 package com.example.trafscot.Models;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class ChildItemsInfo {
 
     private String subItemName = "";

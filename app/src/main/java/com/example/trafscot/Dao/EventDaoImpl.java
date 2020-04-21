@@ -20,6 +20,9 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.DocumentBuilderFactory;
 import static com.example.trafscot.Service.Helpers.getDateDiff;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class EventDaoImpl  implements EventDao{
 
     private String currentIncidents = "https://trafficscotland.org/rss/feeds/currentincidents.aspx";

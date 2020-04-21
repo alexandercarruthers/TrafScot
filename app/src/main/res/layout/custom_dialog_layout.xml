@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--Alexander Carruthers - S1828301-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="wrap_content"
@@ -11,7 +10,6 @@
         android:layout_margin="10sp"
         android:gravity="center"
         android:orientation="vertical">
-
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -21,11 +19,8 @@
             android:paddingRight="10sp"
             android:text="Days of roadworks, indicated by colour"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold"
-
-            />
+            android:textStyle="bold" />
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/layoutShort"
         android:layout_width="wrap_content"
@@ -34,7 +29,6 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/shortDelayIcon"
             android:layout_width="90sp"
@@ -44,7 +38,6 @@
             android:paddingRight="10sp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
-
         <TextView
             android:id="@+id/shortDelayDesc"
             android:layout_width="wrap_content"
@@ -54,11 +47,8 @@
             android:paddingLeft="10sp"
             android:paddingRight="10sp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/text"
-
-            />
+            android:textColor="@color/text" />
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/layoutMedium"
         android:layout_width="wrap_content"
@@ -67,7 +57,6 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/mediumDelayIcon"
             android:layout_width="90sp"
@@ -76,10 +65,7 @@
             android:paddingLeft="10sp"
             android:paddingRight="10sp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
-
-            />
-
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/mediumDelayDesc"
             android:layout_width="wrap_content"
@@ -90,18 +76,15 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text" />
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/layoutLong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layoutMedium"
         android:layout_centerHorizontal="true"
-
         android:layout_marginBottom="10sp"
         android:gravity="center"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/longDelayIcon"
             android:layout_width="90sp"
@@ -110,9 +93,7 @@
             android:paddingLeft="10sp"
             android:paddingRight="10sp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
-            />
-
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/longDelayDesc"
             android:layout_width="wrap_content"

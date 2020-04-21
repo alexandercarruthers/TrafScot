@@ -1,6 +1,9 @@
 package com.example.trafscot.Models;
 import java.util.ArrayList;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class GroupItemsInfo {
 
     private String listName;

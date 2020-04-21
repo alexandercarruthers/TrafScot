@@ -3,11 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/LinearLayout1"
         android:layout_height="fill_parent"
         android:layout_width="match_parent"
         android:orientation="vertical">
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
@@ -15,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context="com.example.mapwithmarker.MapsMarkerActivity"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <TextView
             android:id="@+id/MapDetails"
             android:layout_width="match_parent"
@@ -25,6 +28,6 @@
             android:textColor="@color/text"
             android:textSize="20sp"
             android:text=""
-            android:layout_weight="6" />
+            android:layout_weight="3" />
     </LinearLayout>
 </LinearLayout>

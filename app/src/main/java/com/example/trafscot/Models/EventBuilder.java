@@ -2,6 +2,9 @@ package com.example.trafscot.Models;
 
 import java.util.Date;
 
+/**
+ * Alexander Carruthers - S1828301
+ */
 public class EventBuilder {
     private String title;
     private String description;

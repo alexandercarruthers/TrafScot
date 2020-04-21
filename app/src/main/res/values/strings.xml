@@ -3,5 +3,8 @@
     <string name="title_activity_maps">maps</string>
     <string name="date_placeholder">01-01-2020</string>
     <string name="records_placeholder">Records: </string>
+    <string name="dateError">DATE ERROR</string>
+    <string name="trunkRoadPlaceholder">M8</string>
+
 
 </resources>

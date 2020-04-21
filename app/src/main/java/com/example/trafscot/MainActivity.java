@@ -1,6 +1,8 @@
 package com.example.trafscot;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -53,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnClear;
     private Button btnFilterDate;
     private Button btnFilterRoad;
-    private LinkedHashMap<String, GroupItemsInfo> detailsOfTitlesList = new LinkedHashMap<String, GroupItemsInfo>();
-    private ArrayList<GroupItemsInfo> titlesList = new ArrayList<GroupItemsInfo>();
+    private LinkedHashMap<String, GroupItemsInfo> detailsOfTitlesList;
+    private ArrayList<GroupItemsInfo> titlesList;
     private CustomerExpandableListAdapter myExpandableListAdapter;
     private ExpandableListView simpleExpandableListView;
     DatePickerDialog datePickerDialog;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton rdbCurrentRoadworks;
     private RadioButton rdbFutureRoadworks;
     private Toolbar toolbar;
+    private DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,13 +109,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int[] descTextViewIDs = new int[] {R.id.shortDelayDesc, R.id.mediumDelayDesc, R.id.longDelayDesc};
                 int[] iconTextViewIDs = new int[] {R.id.shortDelayIcon, R.id.mediumDelayIcon, R.id.longDelayIcon};
                 for (int i = 0; i < delayDescs.size(); i++) {
-                    String resource_delayColor = delayColours.get(i);
-                    String resource_delayDesc = delayDescs.get(i);
                     TextView tv = dialog.findViewById(descTextViewIDs[i]);
-                    tv.setText(resource_delayDesc);
+                    tv.setText(delayDescs.get(i));
                     TextView iconTextView = dialog.findViewById(iconTextViewIDs[i]);
-                    iconTextView.setText("M8");
-                    iconTextView.setBackgroundColor(Color.parseColor(resource_delayColor));
+                    iconTextView.setText(R.string.trunkRoadPlaceholder);
+                    iconTextView.setBackgroundColor(Color.parseColor(delayColours.get(i)));
                 }
                 dialog.show();
                 return true;
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(applicationContext, text, toastLength).show();
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void setViews() {
         radioGroupRoadworks = findViewById(R.id.radioRoadworks);
         rdbCurrentIncidents = findViewById(R.id.radioCurrentIncidents);
@@ -149,7 +151,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtRecords = findViewById(R.id.txtRecords);
         simpleExpandableListView = findViewById(R.id.simpleExpandableListView);
         toolbar = findViewById(R.id.my_toolbar);
-
+        dateFormat = new SimpleDateFormat("d-M-y");
+        detailsOfTitlesList = new LinkedHashMap<>();
+        titlesList = new ArrayList<>();
     }
 
     private void setCustomButtonListeners() {
@@ -188,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.set(year, monthOfYear, dayOfMonth);
                                 datePicked = calendar.getTime();
-                                DateFormat dateFormat = new SimpleDateFormat("d-M-y");
                                 String strDate = dateFormat.format(datePicked);
                                 txtFilterDate.setText(strDate);
                             }
@@ -235,6 +238,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+    @SuppressLint("SimpleDateFormat")
     public void onClick(View view) {
         if (view == btnClear){
             currentlySelected.clear();
@@ -246,12 +251,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(!string_date_picked.equals("")){
                 Date datePicked = null;
                 try {
-                    datePicked = new SimpleDateFormat("d-M-y").parse(string_date_picked);
+                    datePicked = dateFormat.parse(string_date_picked);
                     List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
                     refreshExpandedListView(filteredRoadworks);
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    txtFilterDate.setText("DATE ERROR");
+                    txtFilterDate.setText(R.string.dateError);
                 }
             }
         }
@@ -285,13 +290,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private List<Event> getTrunkRoadFilteredEventList(String trunkRoad, List<Event> eventsToFilter){
         EventDao eventDao = new EventDaoImpl();
-        List<Event> filteredEvents = eventDao.getMotorwayEvents(trunkRoad,eventsToFilter);
-        return filteredEvents;
+        return eventDao.getMotorwayEvents(trunkRoad, eventsToFilter);
     }
     private List<Event> getFilteredEventList(Date date, List<Event> eventToFilter){
         EventDao eventDao = new EventDaoImpl();
-        List<Event> filteredEvents = eventDao.getRoadworksOnDate(date,eventToFilter);
-        return filteredEvents;
+        return eventDao.getRoadworksOnDate(date, eventToFilter);
     }
     private void setDataExpandingListView(){
         myExpandableListAdapter = new CustomerExpandableListAdapter(this, titlesList);
@@ -362,12 +365,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         clearOnlyListView();
     }
     private String formatDate(Date date){
-        DateFormat dateFormat = new SimpleDateFormat("d-M-y");
-        String strDate = dateFormat.format(date);
-        return strDate;
+        return dateFormat.format(date);
     }
     private void loadData(List<Event> data) {
-        txtRecords.setText(" " + data.size());
+        txtRecords.setText(data.size());
         if(data.size() > 0){
             for(Event event : data){
                 addProduct(event.getTitle(), "Trunk Road: " + event.getTrunkRoad());
@@ -417,10 +418,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         // get the children for the group
         ArrayList<ChildItemsInfo> productList = headerInfo.getEventName();
-        // size of the children list
-        int listSize = productList.size();
-        // add to the counter
-        listSize++;
         // create a new child and add that to the group
         ChildItemsInfo detailInfo = new ChildItemsInfo();
         detailInfo.setName(roadworkDetail);

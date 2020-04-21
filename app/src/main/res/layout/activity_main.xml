@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
 
+
             >
 
             <RadioButton
@@ -33,7 +34,8 @@
                 android:text="Current Incidents"
                 android:textColor="@color/text"
                 android:buttonTint="@color/text"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/radioCurrentRoadworks"
@@ -42,7 +44,8 @@
                 android:text="Current Roadworks"
                 android:textColor="@color/text"
                 android:buttonTint="@color/text"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/radioFutureRoadworks"
@@ -51,126 +54,136 @@
                 android:text="Future Roadworks"
                 android:textColor="@color/text"
                 android:buttonTint="@color/text"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="20sp" />
 
 
         </RadioGroup>
 
     </LinearLayout>
+
+
     <GridLayout
         android:id="@+id/GridLayout1"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:columnCount="3"
-        android:rowCount="4"
+        android:horizontalSpacing="40sp"
         android:orientation="horizontal"
+        android:rowCount="4"
         android:useDefaultMargins="true"
         android:verticalSpacing="40sp"
-        android:horizontalSpacing="40sp"
-        tools:context=".GridXMLActivity" >
-
-
-        <TextView
-            android:id="@+id/placeholderFilterDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Filter By Date"
-            android:textColor="@color/text"
-            android:layout_column="0"
-            android:layout_row="0"
-            />
-        <EditText
-            android:id="@+id/txtFilterDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date_placeholder"
-            android:background="@drawable/textview"
-            android:textColor="@color/text"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:inputType="none"
-            android:focusableInTouchMode="true"
-            android:cursorVisible="false"
-            android:focusable="false"
-            />
+        tools:context=".GridXMLActivity">
 
 
         <Button
             android:id="@+id/btnFilterDate"
-            android:layout_width="wrap_content"
+            android:layout_width="130sp"
             android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-
             android:layout_row="0"
             android:layout_column="2"
             android:background="@drawable/button"
+            android:padding="10sp"
             android:text="Filter by Date"
-
+            android:layout_gravity="right|clip_horizontal"
             android:textColor="@color/mainBG" />
+
+        <Button
+            android:id="@+id/btnFilterRoad"
+            android:layout_width="130sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|clip_horizontal"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:background="@drawable/button"
+            android:padding="10sp"
+            android:text="Filter by Road"
+            android:textColor="@color/mainBG" />
+
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="130sp"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:layout_gravity="right|clip_horizontal"
+            android:background="@drawable/button"
+            android:text="Clear"
+            android:textColor="@color/mainBG" />
+
+        <EditText
+            android:id="@+id/txtFilterDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center"
+            android:background="@drawable/textview"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:inputType="none"
+            android:text="@string/date_placeholder"
+            android:textColor="@color/text"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/trunkRoadSpinner"
+            android:layout_width="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:backgroundTint="@color/text"
+            android:spinnerMode="dialog"
+            android:textColor="@color/text"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/placeholderFilterRoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filter By Road"
-            android:textColor="@color/text"
-            android:layout_column="0"
             android:layout_row="1"
-            />
+            android:layout_column="0"
+            android:text="Filter By Road"
+            android:textColor="@color/text" />
 
-        <Spinner
-            android:id="@+id/trunkRoadSpinner"
-            android:layout_width="100sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:spinnerMode="dialog"
-            android:textColor="@color/text"
-            android:backgroundTint="@color/text"
-            android:layout_column="1"
-            android:layout_row="1"/>
-        <Button
-            android:id="@+id/btnFilterRoad"
+        <TextView
+            android:id="@+id/placeholderFilterDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:text="Filter by Road"
-            android:textColor="@color/mainBG"
-            android:background="@drawable/button"
-            android:layout_column="2"
-            android:layout_row="1"/>
+            android:layout_row="0"
+            android:layout_column="0"
+            android:text="Filter By Date"
+            android:textColor="@color/text" />
 
-        <Button
-            android:id="@+id/btnClear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:text="Clear"
-            android:textColor="@color/mainBG"
-            android:background="@drawable/button"
-            android:layout_column="2"
-            android:layout_row="2"/>
         <TextView
             android:id="@+id/placeholderRecords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
             android:layout_alignParentTop="true"
             android:text="@string/records_placeholder"
-            android:textColor="@color/text"
-            android:layout_column="0"
-            android:layout_row="2"/>
+            android:textColor="@color/text" />
+
         <TextView
             android:id="@+id/txtRecords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center"
             android:layout_alignParentTop="true"
             android:text="0"
-            android:textColor="@color/text"
-            android:layout_column="1"
-            android:layout_row="2"/>
+            android:textSize="20sp"
+            android:textColor="@color/text" />
     </GridLayout>
-
-
-
 
     <ExpandableListView
         android:id="@+id/simpleExpandableListView"

@@ -194,7 +194,7 @@
         android:groupIndicator="@drawable/custom_expandable"/>
 
 
-    </LinearLayout>
+</LinearLayout>
 
 
 

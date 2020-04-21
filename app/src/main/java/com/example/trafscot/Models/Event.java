@@ -1,7 +1,9 @@
 package com.example.trafscot.Models;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public  class Event{
+public class Event {
     //Declare variables as private final
     private final String title;
     private final String description;

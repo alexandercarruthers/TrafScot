@@ -72,7 +72,7 @@ public class CustomerExpandableListAdapter implements ExpandableListAdapter {
             LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inf.inflate(R.layout.group_items, null);
         }
-        TextView heading = (TextView) convertView.findViewById(R.id.heading);
+        TextView heading = convertView.findViewById(R.id.heading);
         heading.setText(headerInfo.getName().trim());
         //trunk road
         int iend = headerInfo.getName().indexOf(" ");
@@ -80,12 +80,12 @@ public class CustomerExpandableListAdapter implements ExpandableListAdapter {
         if (iend != -1) {
             motorway= headerInfo.getName().substring(0 , iend);
         }
-        TextView icon = (TextView) convertView.findViewById(R.id.icon);
+        TextView icon = convertView.findViewById(R.id.icon);
         icon.setText(motorway);
         ArrayList<ChildItemsInfo> values = headerInfo.getEventName();
         for(ChildItemsInfo items : values){
             if (items.getName().startsWith("Days of works")){
-                String segments[] = items.getName().split(": ");
+                String[] segments = items.getName().split(": ");
                 String days_value = segments[1];
                 Integer days_of_works = Integer.parseInt(days_value);
                 icon.setBackgroundColor(Color.parseColor(getRoadworksImpact(days_of_works)));
@@ -113,14 +113,15 @@ public class CustomerExpandableListAdapter implements ExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.child_items, null);
         }
-        TextView childItem = (TextView) convertView.findViewById(R.id.childItem);
+        TextView childItem = convertView.findViewById(R.id.childItem);
         String display = detailInfo.getName();
         childItem.setText(display.trim());
         if(display.startsWith("Loc")) {
-            childItem.setTextColor(Color.BLUE);
+            childItem.setTextColor(Color.WHITE);
         }
         else{
-            int color = Integer.parseInt("00a8cc", 16)+0xFF000000;
+
+            int color = Color.parseColor("#00a8cc");
             childItem.setTextColor(color);
         }
         return convertView;

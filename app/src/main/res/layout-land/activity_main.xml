@@ -1,117 +1,230 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/mainBG">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <LinearLayout
-            android:id="@+id/LinearLayoutVerticalSplitL"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnCurrentIncidents"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Current Incidents"
-                android:minHeight="0dp"
-                />
-
-            <Button
-                android:id="@+id/btnCurrentRoadworks"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:text="Current Roadworks"
-                />
-
-            <Button
-                android:id="@+id/btnFutureRoadworks"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:text="Future Roadworks"
-                />
-
-
             <LinearLayout
-                android:id="@+id/LinearLayout2"
-                android:layout_width="fill_parent"
+                android:id="@+id/LinearLayout0"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_width="wrap_content">
 
-                <Button
-                    android:id="@+id/btnFilterDate"
+                <RadioGroup
+                    android:id="@+id/radioRoadworks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:minHeight="0dp"
-                    android:text="Filter by Date" />
+                    android:orientation="vertical"
 
-                <Button
-                    android:id="@+id/btnFilterRoad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:minHeight="0dp"
-                    android:text="Filter by Road" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/LinearLayout3"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    >
 
-                <TextView
-                    android:id="@+id/txtFilterDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="12-01-2020" />
-                <Spinner
-                    android:id="@+id/trunkRoadSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:spinnerMode="dialog" />
+                    <RadioButton
+                        android:id="@+id/radioCurrentIncidents"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current Incidents"
+                        android:textColor="@color/text"
+                        android:buttonTint="@color/text"
+                        android:layout_weight="1"
+                        android:textSize="20sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioCurrentRoadworks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current Roadworks"
+                        android:textColor="@color/text"
+                        android:buttonTint="@color/text"
+                        android:layout_weight="1"
+                        android:textSize="20sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioFutureRoadworks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Future Roadworks"
+                        android:textColor="@color/text"
+                        android:buttonTint="@color/text"
+                        android:layout_weight="1"
+                        android:textSize="20sp" />
+
+
+                </RadioGroup>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/LinearLayout4"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:id="@+id/LinearLayoutGrid"
+                android:layout_width="350sp"
+                android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/btnClear"
-                    android:layout_width="fill_parent"
+                <GridLayout
+                    android:id="@+id/GridLayout1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:minHeight="0dp"
-                    android:text="Clear" />
+                    android:layout_gravity="left"
+                    android:columnCount="3"
+                    android:horizontalSpacing="40sp"
+                    android:verticalSpacing="40sp"
+                    android:orientation="vertical"
+                    android:rowCount="4"
+                    tools:context=".GridXMLActivity">
 
-                <TextView
-                    android:id="@+id/records"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Records: " />
+
+                    <Button
+                        android:id="@+id/btnFilterDate"
+                        android:layout_width="130sp"
+                        android:layout_height="wrap_content"
+                        android:layout_row="0"
+                        android:layout_column="2"
+                        android:background="@drawable/button"
+                        android:padding="10sp"
+                        android:text="Filter by Date"
+
+                        android:textColor="@color/mainBG" />
+
+                    <Button
+                        android:id="@+id/btnFilterRoad"
+                        android:layout_width="130sp"
+                        android:layout_height="wrap_content"
+                        android:layout_row="1"
+                        android:layout_column="2"
+                        android:background="@drawable/button"
+                        android:padding="10sp"
+                        android:text="Filter by Road"
+                        android:textColor="@color/mainBG" />
+
+
+                    <Button
+                        android:id="@+id/btnClear"
+                        android:layout_width="130sp"
+                        android:layout_height="wrap_content"
+                        android:layout_row="2"
+                        android:layout_column="2"
+                        android:background="@drawable/button"
+                        android:text="Clear"
+                        android:textColor="@color/mainBG" />
+
+                    <EditText
+                        android:id="@+id/txtFilterDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="0"
+                        android:layout_column="1"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="left"
+                        android:background="@drawable/textview"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="true"
+                        android:inputType="none"
+                        android:text="@string/date_placeholder"
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/trunkRoadSpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="1"
+                        android:layout_column="1"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="left"
+                        android:backgroundTint="@color/text"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/placeholderFilterRoad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="1"
+                        android:layout_column="0"
+                        android:text="Filter By Road"
+                        android:textColor="@color/text" />
+
+                    <TextView
+                        android:id="@+id/placeholderFilterDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="0"
+                        android:layout_column="0"
+                        android:text="Filter By Date"
+                        android:textColor="@color/text" />
+
+                    <TextView
+                        android:id="@+id/placeholderRecords"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="2"
+                        android:layout_column="0"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/records_placeholder"
+                        android:textColor="@color/text" />
+
+                    <TextView
+                        android:id="@+id/txtRecords"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_row="2"
+                        android:layout_column="1"
+                        android:layout_columnWeight="1"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="left"
+                        android:text="0"
+                        android:textColor="@color/text"
+                        android:textSize="20sp" />
+                </GridLayout>
             </LinearLayout>
+
+
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/LinearLayoutVerticalSplitR"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <ExpandableListView
                 android:id="@+id/simpleExpandableListView"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:divider="#0f0"
-                android:dividerHeight="1dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/primary"
+                android:dividerHeight="1dp"
+                android:groupIndicator="@drawable/custom_expandable" />
         </LinearLayout>
+
+
     </LinearLayout>
+
+
+</LinearLayout>
+
+
+

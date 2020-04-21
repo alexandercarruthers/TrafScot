@@ -1,7 +1,6 @@
 package com.example.trafscot;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,14 +19,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.widget.Toolbar;
-
 import com.example.trafscot.Dao.EventDao;
 import com.example.trafscot.Dao.EventDaoImpl;
 import com.example.trafscot.Models.ChildItemsInfo;
@@ -46,74 +42,43 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    //current selected
-    List<Event> currentlySelected = new ArrayList<>();
     //data
+    List<Event> currentlySelected = new ArrayList<>();
     List<Event> currentIncidents = new ArrayList<>();
     List<Event> currentRoadworks = new ArrayList<>();
     List<Event> futureRoadworks = new ArrayList<>();
-    //ui
     private TextView txtFilterDate;
     private TextView txtRecords;
     private Button btnClear;
     private Button btnFilterDate;
     private Button btnFilterRoad;
-    private LinkedHashMap<String, GroupItemsInfo> songsList = new LinkedHashMap<String, GroupItemsInfo>();
-    private ArrayList<GroupItemsInfo> deptList = new ArrayList<GroupItemsInfo>();
+    private LinkedHashMap<String, GroupItemsInfo> detailsOfTitlesList = new LinkedHashMap<String, GroupItemsInfo>();
+    private ArrayList<GroupItemsInfo> titlesList = new ArrayList<GroupItemsInfo>();
     private CustomerExpandableListAdapter myExpandableListAdapter;
     private ExpandableListView simpleExpandableListView;
-
-
     DatePickerDialog datePickerDialog;
     Date datePicked;
-
     private Spinner trunkRoadSpinner;
-
+    private RadioGroup radioGroupRoadworks;
     private RadioButton rdbCurrentIncidents;
     private RadioButton rdbCurrentRoadworks;
     private RadioButton rdbFutureRoadworks;
-
-    private Toolbar toolbar;                              // Declaring the Toolbar Object
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        rdbCurrentIncidents = (RadioButton) findViewById(R.id.radioCurrentIncidents);
-        rdbCurrentRoadworks = (RadioButton) findViewById(R.id.radioCurrentRoadworks);
-        rdbFutureRoadworks = (RadioButton) findViewById(R.id.radioFutureRoadworks);
-        txtFilterDate = (EditText)findViewById(R.id.txtFilterDate);
-        btnFilterDate = (Button) findViewById(R.id.btnFilterDate);
-        btnFilterDate.setOnClickListener(this);
-        trunkRoadSpinner = (Spinner) findViewById(R.id.trunkRoadSpinner);
-        btnFilterRoad = (Button) findViewById(R.id.btnFilterRoad);
-        btnFilterRoad.setOnClickListener(this);
-        btnClear = (Button) findViewById(R.id.btnClear);
-        btnClear.setOnClickListener(this);
-        txtRecords = (TextView)findViewById(R.id.txtRecords);
-        simpleExpandableListView = (ExpandableListView) findViewById(R.id.simpleExpandableListView);
+        setViews();
+        setCustomButtonListeners();
         setCustomRadioButtonListeners();
         setCustomEditTextDatePickerListener();
-        Boolean network_connected = haveNetworkConnection();
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        if(network_connected == false) {
-            Toast.makeText(context, "No network connectivity", duration).show();
-        }
-        else{
-
-//            Toast.makeText(context, "Data sources loaded", duration).show();
-        }
+        setSupportActionBar(toolbar);
+        displayNetworkConnection();
         AsyncTaskExample asyncTask = new AsyncTaskExample();
         asyncTask.execute();
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-
     }
 
     @Override
@@ -127,29 +92,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                Boolean network_connected = haveNetworkConnection();
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
-                if(network_connected == false) {
-                    Toast.makeText(context, "No network connectivity", duration).show();
-                }
-                else{
+                displayNetworkConnection();
+                if (haveNetworkConnection()) {
                     AsyncTaskExample asyncTask = new AsyncTaskExample();
                     asyncTask.execute();
-                    Toast.makeText(context, "Data sources refreshed", duration).show();
                 }
-                // User chose the "Settings" item, show the app settings UI...
                 return true;
-
             case R.id.action_help:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
                 final Dialog dialog = new Dialog(MainActivity.this);
-
-                //setting custom layout to dialog
                 dialog.setContentView(R.layout.custom_dialog_layout);
-                //TextView dialogTitle = (TextView) dialog.findViewById(R.id.title);
-                //dialogTitle.setText("Days of roadworks, indicated by colour");
                 List<String> delayDescs = Arrays.asList("< 10 ", "> 20 ", "> 60 ");
                 List<String> delayColours = Arrays.asList("#ffd460", "#f07b3f", "#ea5455");
                 int[] descTextViewIDs = new int[] {R.id.shortDelayDesc, R.id.mediumDelayDesc, R.id.longDelayDesc};
@@ -157,39 +108,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (int i = 0; i < delayDescs.size(); i++) {
                     String resource_delayColor = delayColours.get(i);
                     String resource_delayDesc = delayDescs.get(i);
-                    TextView tv = (TextView) dialog.findViewById(descTextViewIDs[i]);
+                    TextView tv = dialog.findViewById(descTextViewIDs[i]);
                     tv.setText(resource_delayDesc);
-                    TextView iconTextView = (TextView) dialog.findViewById(iconTextViewIDs[i]);
+                    TextView iconTextView = dialog.findViewById(iconTextViewIDs[i]);
                     iconTextView.setText("M8");
                     iconTextView.setBackgroundColor(Color.parseColor(resource_delayColor));
                 }
-
-//                TextView tv = dialog.findViewById(R.id.shortDelayDesc);
-//                tv.setText("< 10 days delay");
-//                TextView iconTextView = (TextView) dialog.findViewById(R.id.shortDelayIcon);
-//                iconTextView.setText("M8");
-//                iconTextView.setBackgroundColor(Color.parseColor("#ffd460"));
                 dialog.show();
-
-
-
-
-
                 return true;
-
             default:
                 // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
+                return super.onOptionsItemSelected(item);// Invoke the superclass to handle it.
         }
     }
 
+    private void displayNetworkConnection() {
+        Context applicationContext = getApplicationContext();
+        int toastLength = Toast.LENGTH_SHORT;
+        String text = "";
+        String noNet = "No network connectivity";
+        String net = "Network connection established";
+        if (!haveNetworkConnection()) {
+            text = noNet;
+        } else {
+            text = net;
+        }
+        Toast.makeText(applicationContext, text, toastLength).show();
+    }
 
+    private void setViews() {
+        radioGroupRoadworks = findViewById(R.id.radioRoadworks);
+        rdbCurrentIncidents = findViewById(R.id.radioCurrentIncidents);
+        rdbCurrentRoadworks = findViewById(R.id.radioCurrentRoadworks);
+        rdbFutureRoadworks = findViewById(R.id.radioFutureRoadworks);
+        txtFilterDate = (EditText) findViewById(R.id.txtFilterDate);
+        btnFilterDate = findViewById(R.id.btnFilterDate);
+        trunkRoadSpinner = findViewById(R.id.trunkRoadSpinner);
+        btnFilterRoad = findViewById(R.id.btnFilterRoad);
+        btnClear = findViewById(R.id.btnClear);
+        txtRecords = findViewById(R.id.txtRecords);
+        simpleExpandableListView = findViewById(R.id.simpleExpandableListView);
+        toolbar = findViewById(R.id.my_toolbar);
+
+    }
+
+    private void setCustomButtonListeners() {
+        btnFilterDate.setOnClickListener(this);
+        btnFilterRoad.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
+    }
     private boolean haveNetworkConnection() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
-
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
@@ -228,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
-
     private void refreshExpandedListView(List<Event> currentData){
         currentlySelected.clear();
         clearExpandingListView();
@@ -237,8 +206,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadData(currentlySelected);
         setDataExpandingListView();
     }
-
-
     public void setCustomRadioButtonListeners(){
         rdbCurrentIncidents.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,44 +213,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 boolean checked = ((RadioButton) v).isChecked();
                 if (checked){
                     refreshExpandedListView(currentIncidents);
-//                    currentlySelected.clear();
-//                    clearExpandingListView();
-//                    currentlySelected.addAll(currentIncidents);
-//                    populateTrunkRoadSpinner(currentlySelected);
-//                    loadData(currentlySelected);
-//                    setDataExpandingListView();
                 }
             }
         });
-
         rdbCurrentRoadworks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean checked = ((RadioButton) v).isChecked();
                 if (checked){
                     refreshExpandedListView(currentRoadworks);
-//                    currentlySelected.clear();
-//                    clearExpandingListView();
-//                    currentlySelected.addAll(currentRoadworks);
-//                    populateTrunkRoadSpinner(currentlySelected);
-//                    loadData(currentlySelected);
-//                    setDataExpandingListView();
                 }
             }
         });
-
         rdbFutureRoadworks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean checked = ((RadioButton) v).isChecked();
                 if (checked){
                     refreshExpandedListView(futureRoadworks);
-//                    currentlySelected.clear();
-//                    clearExpandingListView();
-//                    currentlySelected.addAll(futureRoadworks);
-//                    populateTrunkRoadSpinner(currentlySelected);
-//                    loadData(currentlySelected);
-//                    setDataExpandingListView();
                 }
             }
         });
@@ -302,29 +249,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     datePicked = new SimpleDateFormat("d-M-y").parse(string_date_picked);
                     List<Event>  filteredRoadworks = getFilteredEventList(datePicked,currentlySelected);
                     refreshExpandedListView(filteredRoadworks);
-//                    currentlySelected.clear();
-//                    clearExpandingListView();
-//                    currentlySelected.addAll(filteredRoadworks);
-//                    populateTrunkRoadSpinner(currentlySelected);
-//                    loadData(currentlySelected);
-//                    setDataExpandingListView();
                 } catch (ParseException e) {
                     e.printStackTrace();
                     txtFilterDate.setText("DATE ERROR");
                 }
-
             }
         }
         if (view == btnFilterRoad){
             String filterOnTrunkRoad = String.valueOf(trunkRoadSpinner.getSelectedItem());
             List<Event>  filteredRoadworks = getTrunkRoadFilteredEventList(filterOnTrunkRoad,currentlySelected);
             refreshExpandedListView(filteredRoadworks);
-//            currentlySelected.clear();
-//            clearExpandingListView();
-//            currentlySelected.addAll(filteredRoadworks);
-//            populateTrunkRoadSpinner(currentlySelected);
-//            loadData(currentlySelected);
-//            setDataExpandingListView();
         }
     }
 
@@ -338,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return newList;// return the new list
     }
-
     private void populateTrunkRoadSpinner(List<Event> events){
         ArrayList<String> trunkRoads = new ArrayList<>();
         for(Event event : events){
@@ -361,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return filteredEvents;
     }
     private void setDataExpandingListView(){
-        myExpandableListAdapter = new CustomerExpandableListAdapter(this, deptList);
+        myExpandableListAdapter = new CustomerExpandableListAdapter(this, titlesList);
         // attach the adapter to the expandable list view
         simpleExpandableListView.setAdapter(myExpandableListAdapter);
         // setOnChildClickListener listener for child row click or song name click
@@ -369,11 +302,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         simpleExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                GroupItemsInfo headerInfo = deptList.get(groupPosition);
+                GroupItemsInfo headerInfo = titlesList.get(groupPosition);
                 ChildItemsInfo detailInfo = headerInfo.getEventName().get(childPosition);
                 if (detailInfo.getName().startsWith("Location:")){
-                    String segments[] = detailInfo.getName().split(":");
-                    String xy[] =  segments[1].split(",");
+                    String[] segments = detailInfo.getName().split(":");
+                    String[] xy = segments[1].split(",");
                     String x = xy[0];
                     String y = xy[1];
                     String title = headerInfo.getName();
@@ -408,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         simpleExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                GroupItemsInfo headerInfo = deptList.get(groupPosition);
+                GroupItemsInfo headerInfo = titlesList.get(groupPosition);
                 return false;
             }
         });
@@ -420,11 +353,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         simpleExpandableListView.setAdapter(myExpandableListAdapter);
     }
     private void clearExpandingListView(){
+        radioGroupRoadworks.clearCheck();
         currentlySelected.clear();
         txtRecords.setText("0");
         txtFilterDate.setText(R.string.date_placeholder);
-        deptList.clear();
-        songsList.clear();
+        titlesList.clear();
+        detailsOfTitlesList.clear();
         clearOnlyListView();
     }
     private String formatDate(Date date){
@@ -463,23 +397,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     addProduct(event.getTitle(), event.getDisruption());
                 }
                 addProduct(event.getTitle(), event.getPoint().toString());
-                //addProduct(event.getTitle(), event.getDescription());
             }
         }else
         {
-            //addProduct("no data", "");
+            addProduct("No data", "");
         }
     }
-    private void addProduct(String songsListName, String roadworkDetail) {
+
+    private void addProduct(String titleName, String roadworkDetail) {
         int groupPosition = 0;
         //check the hashmap if the group already exists
-        GroupItemsInfo headerInfo = songsList.get(songsListName);
+        GroupItemsInfo headerInfo = detailsOfTitlesList.get(titleName);
         //add the group if doesn't exists
         if (headerInfo == null) {
             headerInfo = new GroupItemsInfo();
-            headerInfo.setName(songsListName);
-            songsList.put(songsListName, headerInfo);
-            deptList.add(headerInfo);
+            headerInfo.setName(titleName);
+            detailsOfTitlesList.put(titleName, headerInfo);
+            titlesList.add(headerInfo);
         }
         // get the children for the group
         ArrayList<ChildItemsInfo> productList = headerInfo.getEventName();
@@ -493,18 +427,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         productList.add(detailInfo);
         headerInfo.setInnerItemName(productList);
         // find the group position inside the list
-        groupPosition = deptList.indexOf(headerInfo);
+        groupPosition = titlesList.indexOf(headerInfo);
     }
-
-
 
     private class AsyncTaskExample extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            while(!haveNetworkConnection()){
+            while (!haveNetworkConnection()) { //check for network connection every second
                 try {
                     Thread.sleep(1000);
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -513,14 +444,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currentIncidents = eventDao.getAllCurrentIncidents();
             currentRoadworks = eventDao.getAllCurrentRoadworks();
             futureRoadworks = eventDao.getAllFutureRoadworks();
-
             return null;
         }
         @Override
         protected void onPostExecute(Void v) {
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
-            Toast.makeText(context, "connection established", duration).show();
+            displayNetworkConnection();
         }
     }
 }
